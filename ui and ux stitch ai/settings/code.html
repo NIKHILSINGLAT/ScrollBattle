@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Flex:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed": "#ffdcc6", "surface-container-low": "#1b1b1e", "on-tertiary-container": "#004829", "on-surface-variant": "#ddc1b0", "surface-container": "#1f1f22", "on-tertiary-fixed-variant": "#00522f", "on-primary-fixed": "#301400", "on-secondary-container": "#392600", "surface-container-highest": "#353438", "on-primary-container": "#643000", "surface-variant": "#353438", "inverse-surface": "#e4e1e5", "outline": "#a58c7c", "tertiary-container": "#3ebf7c", "tertiary": "#60dd98", "on-error": "#690005", "surface-bright": "#39393c", "tertiary-fixed-dim": "#60dd98", "on-background": "#e4e1e5", "primary": "#ffb785", "on-secondary-fixed": "#271900", "inverse-on-surface": "#303033", "on-primary-fixed-variant": "#713700", "on-primary": "#502500", "secondary-container": "#bc8700", "on-surface": "#e4e1e5", "on-secondary-fixed-variant": "#5e4200", "outline-variant": "#564336", "secondary": "#f9bd42", "secondary-fixed-dim": "#f9bd42", "on-error-container": "#ffdad6", "inverse-primary": "#954a00", "tertiary-fixed": "#7efab2", "primary-fixed-dim": "#ffb785", "surface": "#131316", "surface-container-high": "#2a2a2d", "on-tertiary-fixed": "#002110", "surface-dim": "#131316", "on-tertiary": "#00391f", "error-container": "#93000a", "surface-tint": "#ffb785", "error": "#ffb4ab", "on-secondary": "#412d00", "primary-container": "#ff8a24", "secondary-fixed": "#ffdea7", "surface-container-lowest": "#0e0e11", "background": "#131316" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "1rem", "gutter": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem", "space-xl": "2rem" }, "fontFamily": { "label-sm": ["Inter"], "display-lg-mobile": ["Inter"], "label-md": ["Inter"], "body-md": ["Roboto Flex"], "display-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-lg": ["Roboto Flex"], "label-lg": ["Inter"], "title-md": ["Inter"], "body-sm": ["Roboto Flex"], "headline-sm": ["Inter"] }, "fontSize": { "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "display-lg-mobile": ["36px", { "lineHeight": "44px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-lg": ["48px", { "lineHeight": "56px", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate max-w-[200px]">Settings</h1></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full px-margin pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full pb-10 space-y-space-lg">
+<!-- Subtitle Framing Banner (Respecting Shell H1 Title) -->
+<div class="px-space-xs pt-space-xs">
+<p class="font-body-md text-body-md text-on-surface-variant">Make Scroll Battle work for you.</p>
+<div class="flex items-center gap-space-sm mt-space-sm">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+        Zero Cloud Telemetry
+      </span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] text-primary">bolt</span>
+        Active Intervention
+      </span>
+</div>
+</div>
+<!-- SECTION A: Daily Allowance -->
+<section class="space-y-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Daily allowance</h2>
+<span class="font-label-sm text-label-sm text-primary">Target: Disciplined</span>
+</div>
+<div class="bg-surface-container rounded-xl p-space-md shadow-sm space-y-space-md">
+<!-- Row with Pill -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="min-w-0 pr-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">sports_score</span>
+<span class="font-title-md text-title-md text-on-surface">Daily Reel limit</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Choose your daily allowance.</p>
+</div>
+<div class="shrink-0 px-3 py-1.5 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold tracking-tight" id="reel-current-display">
+          50 Reels
+        </div>
+</div>
+<!-- Presets Chips List -->
+<div class="pt-space-xs">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-space-sm">Fast presets</p>
+<div class="flex items-center gap-2 overflow-x-auto pb-1" id="preset-container">
+<button class="preset-chip h-10 px-3.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center justify-center transition-all active:scale-95 shrink-0" data-preset="25" onclick="selectPreset(this, '25 Reels')" type="button">
+            25
+          </button>
+<button class="preset-chip h-10 px-3.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold flex items-center gap-1 justify-center shrink-0 shadow-sm transition-all active:scale-95" data-preset="50" onclick="selectPreset(this, '50 Reels')" type="button">
+<span>50</span>
+<span class="text-[10px] opacity-80">• Default</span>
+</button>
+<button class="preset-chip h-10 px-3.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center justify-center transition-all active:scale-95 shrink-0" data-preset="75" onclick="selectPreset(this, '75 Reels')" type="button">
+            75
+          </button>
+<button class="preset-chip h-10 px-3.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center justify-center transition-all active:scale-95 shrink-0" data-preset="100" onclick="selectPreset(this, '100 Reels')" type="button">
+            100
+          </button>
+<button class="preset-chip h-10 px-3 rounded-lg bg-surface-container-high text-on-surface-variant font-label-md text-label-md flex items-center gap-1 justify-center shrink-0 transition-all active:scale-95" data-preset="custom" onclick="selectPreset(this, 'Custom')" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Custom</span>
+</button>
+</div>
+</div>
+<!-- Live telemetry visualization snippet -->
+<div class="p-3 rounded-lg bg-surface-container-lowest flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">timelapse</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Estimated daily friction saved</span>
+</div>
+<span class="font-label-md text-label-md text-secondary font-semibold">~42 mins</span>
+</div>
+</div>
+</section>
+<!-- SECTION B: Warnings / Limit Reminders -->
+<section class="space-y-space-sm">
+<div class="px-space-xs">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Limit reminders</h2>
+</div>
+<div class="bg-surface-container rounded-xl shadow-sm overflow-hidden">
+<!-- Early warning row -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/40">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface">Early warning</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-sm text-label-sm">40 Reels</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Warn me when I'm getting close to my limit.</p>
+</div>
+<!-- Android M3 Toggle -->
+<button aria-checked="true" class="w-12 h-7 rounded-full bg-primary-container p-1 flex items-center transition-colors relative shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary-container shadow-sm transform translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-highest/60 mx-space-md"></div>
+<!-- Final warning row -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/40">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface">Final warning</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-primary font-label-sm text-label-sm">45 Reels</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Remind me when only five Reels remain.</p>
+</div>
+<!-- Android M3 Toggle -->
+<button aria-checked="true" class="w-12 h-7 rounded-full bg-primary-container p-1 flex items-center transition-colors relative shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary-container shadow-sm transform translate-x-5 transition-transform"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION C: Intervention -->
+<section class="space-y-space-sm">
+<div class="px-space-xs">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Intervention</h2>
+</div>
+<div class="bg-surface-container rounded-xl shadow-sm overflow-hidden">
+<!-- Maths Challenge Row -->
+<div class="p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/40">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">calculate</span>
+<span class="font-title-md text-title-md text-on-surface">Maths challenge requirement</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Require a short mental challenge before unlocking additional 20 Reels.</p>
+</div>
+<button aria-checked="true" class="w-12 h-7 rounded-full bg-primary-container p-1 flex items-center transition-colors relative shrink-0" onclick="toggleSwitch(this)" role="switch" type="button">
+<span class="w-5 h-5 rounded-full bg-on-primary-container shadow-sm transform translate-x-5 transition-transform"></span>
+</button>
+</div>
+<div class="h-[1px] bg-surface-container-highest/60 mx-space-md"></div>
+<!-- Intervention Behavior Link Row -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/60 active:bg-surface-container-highest" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">front_hand</span>
+<span class="font-title-md text-title-md text-on-surface">Intervention behavior</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Deliberate pause and friction screen when 50 Reels reached. (Behavioral guidance, non-OS block).</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[22px] shrink-0">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- SECTION D: Tracking -->
+<section class="space-y-space-sm">
+<div class="px-space-xs">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Tracking telemetry</h2>
+</div>
+<div class="bg-surface-container rounded-xl shadow-sm overflow-hidden">
+<!-- Tracking Status & Health -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/60 active:bg-surface-container-highest" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">monitor_heart</span>
+<span class="font-title-md text-title-md text-on-surface">Tracking status & health</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Check Android AppOps permissions and local measurement nodes.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-highest text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+            Active • Local
+          </span>
+<span class="material-symbols-outlined text-on-surface-variant text-[22px]">chevron_right</span>
+</div>
+</button>
+</div>
+</section>
+<!-- SECTION E: Data & Privacy & System -->
+<section class="space-y-space-sm">
+<div class="px-space-xs">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Data & system</h2>
+</div>
+<div class="bg-surface-container rounded-xl shadow-sm overflow-hidden">
+<!-- Privacy & Data -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/60 active:bg-surface-container-highest" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-on-surface text-[18px]">security</span>
+<span class="font-title-md text-title-md text-on-surface">Privacy & Data</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Manage on-device storage, zero cloud telemetry.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[22px] shrink-0">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-highest/60 mx-space-md"></div>
+<!-- Troubleshooting -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-surface-container-high/60 active:bg-surface-container-highest" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-on-surface text-[18px]">build</span>
+<span class="font-title-md text-title-md text-on-surface">Troubleshooting & Diagnostics</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Fix missing stats or permission issues.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[22px] shrink-0">chevron_right</span>
+</button>
+<div class="h-[1px] bg-surface-container-highest/60 mx-space-md"></div>
+<!-- Destructive: Delete History -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-error-container/20 active:bg-error-container/40" onclick="confirmAction('history')" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[18px]">auto_delete</span>
+<span class="font-title-md text-title-md text-error">Delete history</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Erase local log</p>
+</div>
+<span class="material-symbols-outlined text-error/80 text-[20px] shrink-0">delete</span>
+</button>
+<div class="h-[1px] bg-surface-container-highest/60 mx-space-md"></div>
+<!-- Destructive: Reset Settings -->
+<button class="w-full text-left p-space-md flex items-center justify-between gap-space-md transition-colors hover:bg-error-container/20 active:bg-error-container/40" onclick="confirmAction('settings')" type="button">
+<div class="min-w-0 flex-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[18px]">restart_alt</span>
+<span class="font-title-md text-title-md text-error">Reset settings</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Restore all baseline kinetics & limits to stock defaults</p>
+</div>
+<span class="material-symbols-outlined text-error/80 text-[20px] shrink-0">history_toggle_off</span>
+</button>
+</div>
+</section>
+<!-- Interactive Feedback Toast (Hidden by default) -->
+<div class="opacity-0 pointer-events-none transition-opacity duration-300 fixed bottom-6 left-margin right-margin mx-auto max-w-sm bg-surface-container-highest text-on-surface px-4 py-3 rounded-lg shadow-xl flex items-center justify-between z-50" id="settings-toast">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]" id="toast-icon">check_circle</span>
+<span class="font-body-md text-body-md" id="toast-message">Configuration saved</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Applied</span>
+</div>
+<!-- Subtle Footer Metadata -->
+<footer class="pt-space-md pb-space-lg flex flex-col items-center justify-center text-center space-y-1">
+<div class="flex items-center gap-2 text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined text-[15px]">verified_user</span>
+<span class="font-label-sm text-label-sm">Scroll Battle v1.4.0 • 100% On-device execution</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-50">Designed with Kinetic Discipline for Android</p>
+</footer>
+</div>
+<script>
+  function selectPreset(btn, label) {
+    const container = document.getElementById('preset-container');
+    const buttons = container.querySelectorAll('.preset-chip');
+    const display = document.getElementById('reel-current-display');
+
+    buttons.forEach(b => {
+      b.className = 'preset-chip h-10 px-3.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center justify-center transition-all active:scale-95 shrink-0';
+    });
+
+    btn.className = 'preset-chip h-10 px-3.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold flex items-center gap-1 justify-center shrink-0 shadow-sm transition-all active:scale-95';
+    
+    display.textContent = label;
+    showToast('Reel allowance updated to ' + label);
+  }
+
+  function toggleSwitch(btn) {
+    const isChecked = btn.getAttribute('aria-checked') === 'true';
+    const thumb = btn.querySelector('span');
+
+    if (isChecked) {
+      btn.setAttribute('aria-checked', 'false');
+      btn.classList.remove('bg-primary-container');
+      btn.classList.add('bg-surface-container-highest');
+      thumb.classList.remove('translate-x-5', 'bg-on-primary-container');
+      thumb.classList.add('translate-x-0', 'bg-on-surface-variant');
+      showToast('Preference disabled');
+    } else {
+      btn.setAttribute('aria-checked', 'true');
+      btn.classList.remove('bg-surface-container-highest');
+      btn.classList.add('bg-primary-container');
+      thumb.classList.remove('translate-x-0', 'bg-on-surface-variant');
+      thumb.classList.add('translate-x-5', 'bg-on-primary-container');
+      showToast('Preference enabled');
+    }
+  }
+
+  let toastTimeout;
+  function showToast(msg) {
+    const toast = document.getElementById('settings-toast');
+    const msgEl = document.getElementById('toast-message');
+    if (!toast || !msgEl) return;
+    
+    msgEl.textContent = msg;
+    toast.classList.remove('opacity-0', 'pointer-events-none');
+    toast.classList.add('opacity-100');
+
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.remove('opacity-100');
+      toast.classList.add('opacity-0', 'pointer-events-none');
+    }, 2200);
+  }
+
+  function confirmAction(type) {
+    if (type === 'history') {
+      showToast('Local history successfully wiped');
+    } else if (type === 'settings') {
+      showToast('Limits reset to default 50 Reels');
+      const defaultBtn = document.querySelector('[data-preset="50"]');
+      if (defaultBtn) defaultBtn.click();
+    }
+  }
+</script></main></body></html>

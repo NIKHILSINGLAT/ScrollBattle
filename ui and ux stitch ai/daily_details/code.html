@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Roboto+Flex:wght@100..900&display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed": "#ffdcc6", "surface-container-low": "#1b1b1e", "on-tertiary-container": "#004829", "on-surface-variant": "#ddc1b0", "surface-container": "#1f1f22", "on-tertiary-fixed-variant": "#00522f", "on-primary-fixed": "#301400", "on-secondary-container": "#392600", "surface-container-highest": "#353438", "on-primary-container": "#643000", "surface-variant": "#353438", "inverse-surface": "#e4e1e5", "outline": "#a58c7c", "tertiary-container": "#3ebf7c", "tertiary": "#60dd98", "on-error": "#690005", "surface-bright": "#39393c", "tertiary-fixed-dim": "#60dd98", "on-background": "#e4e1e5", "primary": "#ffb785", "on-secondary-fixed": "#271900", "inverse-on-surface": "#303033", "on-primary-fixed-variant": "#713700", "on-primary": "#502500", "secondary-container": "#bc8700", "on-surface": "#e4e1e5", "on-secondary-fixed-variant": "#5e4200", "outline-variant": "#564336", "secondary": "#f9bd42", "secondary-fixed-dim": "#f9bd42", "on-error-container": "#ffdad6", "inverse-primary": "#954a00", "tertiary-fixed": "#7efab2", "primary-fixed-dim": "#ffb785", "surface": "#131316", "surface-container-high": "#2a2a2d", "on-tertiary-fixed": "#002110", "surface-dim": "#131316", "on-tertiary": "#00391f", "error-container": "#93000a", "surface-tint": "#ffb785", "error": "#ffb4ab", "on-secondary": "#412d00", "primary-container": "#ff8a24", "secondary-fixed": "#ffdea7", "surface-container-lowest": "#0e0e11", "background": "#131316" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "margin": "1rem", "gutter": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem", "space-xl": "2rem" }, "fontFamily": { "label-sm": ["Inter"], "display-lg-mobile": ["Inter"], "label-md": ["Inter"], "body-md": ["Roboto Flex"], "display-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-lg": ["Roboto Flex"], "label-lg": ["Inter"], "title-md": ["Inter"], "body-sm": ["Roboto Flex"], "headline-sm": ["Inter"] }, "fontSize": { "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }], "display-lg-mobile": ["36px", { "lineHeight": "44px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "display-lg": ["48px", { "lineHeight": "56px", "fontWeight": "700" }], "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }], "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }], "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl pt-safe"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container-high transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate max-w-[200px]">Daily Details</h1></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full px-margin pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full pb-6 space-y-4">
+<!-- Date Navigation & Context Bar -->
+<div class="flex items-center justify-between bg-surface-container px-4 py-3 rounded-xl">
+<div class="flex items-center space-x-2">
+<button aria-label="Previous day" class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center hover:bg-surface-bright transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<div class="flex items-center space-x-2">
+<span class="font-title-md text-title-md text-on-surface">Saturday, Oct 19</span>
+<span class="font-label-sm text-label-sm bg-surface-container-highest text-on-surface-variant px-2 py-0.5 rounded-full">Yesterday</span>
+</div>
+</div>
+<button aria-label="Next day" class="w-8 h-8 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center hover:bg-surface-bright transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<!-- Hero Telemetry Summary Card -->
+<div class="bg-surface-container p-5 rounded-2xl flex flex-col space-y-4 shadow-sm relative overflow-hidden">
+<!-- Header Row inside Card -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-primary-container text-[18px]">emergency_recording</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Feed Telemetry</span>
+</div>
+<div class="inline-flex items-center space-x-1 bg-error-container text-on-error-container px-2.5 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span class="font-label-sm text-label-sm font-semibold">+12 above limit</span>
+</div>
+</div>
+<!-- Hero Metric Split -->
+<div class="flex flex-col">
+<div class="flex items-baseline space-x-2">
+<span class="font-display-lg-mobile text-display-lg-mobile text-on-surface tracking-tight font-extrabold">62</span>
+<span class="font-headline-sm text-headline-sm text-on-surface-variant font-medium">/ 50 target</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Reels & shorts consumed across high-cadence streams</p>
+</div>
+<!-- Athletic Progress Bar with Boundary Split -->
+<div class="flex flex-col space-y-1.5">
+<div class="w-full h-3 rounded-full bg-surface-container-lowest flex overflow-hidden p-0.5">
+<!-- Within target allocation (50/62 -> ~80.6%) -->
+<div class="h-full bg-primary-container rounded-l-full" style="width: 80.6%;"></div>
+<!-- Over Limit Delta (12/62 -> ~19.4%) -->
+<div class="h-full bg-error rounded-r-full" style="width: 19.4%;"></div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm px-0.5">
+<span>0</span>
+<span class="text-primary font-medium">50 cap threshold</span>
+<span class="text-error font-medium">62 actual</span>
+</div>
+</div>
+<!-- Key Stats Grid (3 Col) -->
+<div class="grid grid-cols-3 gap-2 pt-1">
+<div class="bg-surface-container-high p-3 rounded-xl flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Scroll Time</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5">2h 24m</span>
+<span class="font-label-sm text-label-sm text-tertiary mt-1 flex items-center">
+<span class="material-symbols-outlined text-[13px] mr-0.5">timer</span>Active
+        </span>
+</div>
+<div class="bg-surface-container-high p-3 rounded-xl flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sessions</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-0.5">8</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1 flex items-center">
+<span class="material-symbols-outlined text-[13px] mr-0.5">sync_alt</span>Intervals
+        </span>
+</div>
+<div class="bg-surface-container-high p-3 rounded-xl flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Overdraft</span>
+<span class="font-headline-sm text-headline-sm text-error mt-0.5">+12</span>
+<span class="font-label-sm text-label-sm text-error mt-1 flex items-center">
+<span class="material-symbols-outlined text-[13px] mr-0.5">trending_up</span>Over cap
+        </span>
+</div>
+</div>
+</div>
+<!-- Section A: Chronological Session Breakdown -->
+<div class="flex flex-col space-y-3">
+<div class="flex items-center justify-between px-1">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-semibold tracking-tight">Today's Sessions</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">8 recorded scrolling intervals (partial preview)</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary bg-surface-container-high px-2.5 py-1 rounded-full">Recalibrated</span>
+</div>
+<!-- Timeline List Stack -->
+<div class="flex flex-col space-y-2">
+<!-- Session 1 (Late Night Warning) -->
+<div class="bg-surface-container p-3.5 rounded-xl flex items-center justify-between">
+<div class="flex items-start space-x-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container mt-0.5">
+<span class="material-symbols-outlined text-[20px]">nightlight</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">21:05</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded">42m duration</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">18 Reels • Estimated night session</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-surface-container-highest text-secondary-fixed font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center">
+<span class="material-symbols-outlined text-[12px] mr-0.5">bedtime</span>High Latency
+          </span>
+</div>
+</div>
+<!-- Session 2 (Limit Crossing Event) -->
+<div class="bg-surface-container p-3.5 rounded-xl flex items-center justify-between relative overflow-hidden">
+<div class="flex items-start space-x-3">
+<div class="w-9 h-9 rounded-lg bg-error-container flex items-center justify-center text-error mt-0.5">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">16:20</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded">31m duration</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">14 Reels • Limit crossed at 16:38</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center">
+<span class="material-symbols-outlined text-[12px] mr-0.5">priority_high</span>Exceeded
+          </span>
+</div>
+</div>
+<!-- Session 3 -->
+<div class="bg-surface-container p-3.5 rounded-xl flex items-center justify-between">
+<div class="flex items-start space-x-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-on-surface-variant mt-0.5">
+<span class="material-symbols-outlined text-[20px]">wb_sunny</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">12:40</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded">24m duration</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">11 Reels recorded</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+            Under limit
+          </span>
+</div>
+</div>
+<!-- Session 4 -->
+<div class="bg-surface-container p-3.5 rounded-xl flex items-center justify-between">
+<div class="flex items-start space-x-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary mt-0.5">
+<span class="material-symbols-outlined text-[20px]">coffee</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="font-title-md text-title-md text-on-surface font-semibold">09:15</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded">18m duration</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">8 Reels • Morning check-in</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+            Optimal
+          </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section B: Data Quality Card -->
+<div class="bg-surface-container p-4 rounded-xl flex flex-col space-y-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container text-[16px]">check</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface font-semibold">Complete enough to review</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-medium">94% Confidence</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+      Measurements verified from Android AppOps service. 7 of 8 intervals tracked with high telemetry confidence and hardware timestamp validation.
+    </p>
+</div>
+<!-- Section C: Daily Factual Summary -->
+<div class="bg-surface-container-low p-4 rounded-xl flex items-start space-x-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high flex-shrink-0 flex items-center justify-center text-primary-container mt-0.5">
+<span class="material-symbols-outlined text-[18px]">insights</span>
+</div>
+<div class="flex flex-col space-y-1">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider font-semibold">Kinetic Log</span>
+<p class="font-body-md text-body-md text-on-surface leading-normal">
+        You recorded 62 Reels across 8 sessions, exceeding your 50-Reel baseline. The longest session occurred at 21:05 (42 mins).
+      </p>
+</div>
+</div>
+<!-- Action Controls / Bottom Ergonomics -->
+<div class="pt-2 flex flex-col space-y-2.5">
+<button class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-label-lg text-label-lg py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 transition-transform active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Adjust Saturday in Progress</span>
+</button>
+<button class="w-full bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg py-3 px-4 rounded-xl flex items-center justify-center space-x-2 transition-colors" onclick="history.back()" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Back to Analytics</span>
+</button>
+</div>
+</div></main></body></html>
