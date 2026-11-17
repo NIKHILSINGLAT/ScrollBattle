@@ -162,7 +162,13 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
         var node = event.source ?: return false
         repeat(12) {
             val id = node.viewIdResourceName.orEmpty().lowercase()
-            if (id.contains("clips") || id.contains("reel")) return true
+            if (
+                id.contains("clips_viewer") ||
+                id.contains("clips_video") ||
+                id.contains("clips_media") ||
+                id.contains("clips_swipe_refresh") ||
+                id.contains("reel_viewer")
+            ) return true
             node = node.parent ?: return false
         }
         return false
