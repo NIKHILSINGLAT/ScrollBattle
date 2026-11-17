@@ -376,7 +376,7 @@ class FloatingOverlayManager(private val context: Context) {
                         addView(btnTitle)
 
                         val btnSub = TextView(context).apply {
-                            text = "6 questions · Unlock 20 more"
+                            text = "6 questions · Practice only"
                             textSize = 12f
                             setTextColor(Color.parseColor("#292524"))
                         }
