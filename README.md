@@ -1,13 +1,13 @@
 # 🧠 ScrollBattle — Open-Source Anti-Doomscroll Android Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/Platform-Android%208.0%2B%20(API%2026%2B)-brightgreen.svg)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0-blue.svg)](https://kotlinlang.org)
+[![Platform](https://img.shields.io/badge/Platform-Android%207.0%2B%20(API%2024%2B)-brightgreen.svg)](https://developer.android.com)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3-blue.svg)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose%20Material3-purple.svg)](https://developer.android.com/jetpack/compose)
 [![Open Source](https://img.shields.io/badge/Open%20Source-100%25%20Free-orange.svg)](https://github.com/NIKHILSINGLAT/ScrollBattle)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/NIKHILSINGLAT/ScrollBattle/pulls)
 
-> **The adversarial, open-source Android engine that fights short-form video addiction with viewport-level node tracking, a strict 50-reels daily ceiling, and zero-bypass system force-ejection.**
+> **A personal Android focus tool that counts Instagram Reel-feed transitions and moves the user out of the Reel feed when the daily allowance reaches 50.**
 
 ---
 
@@ -20,20 +20,20 @@ Traditional screen-time apps consistently fail because:
 2. **App-Wide Blunt Hammers**: Blocking all of Instagram or YouTube cuts off vital messaging (DMs, family groups, business inquiries). Users simply disable the blocker.
 3. **Inaccurate Scroll Detection**: Naive accessibility listeners count every touch, comment tap, like, and direct message as a video scroll, corrupting metrics and eroding user trust.
 
-**ScrollBattle solves this.** It isolates **only short-form video ViewPagers**, tracks reel swipes with precision heuristics, maintains a floating on-screen counter, and **physically kicks you out of Instagram to the Android Home screen** the moment you exceed your daily allowance.
+**ScrollBattle is designed for one primary job:** count Instagram Reel-feed transitions and move the user out of that feed when the 50-Reel daily allowance is reached. Detection uses Android Accessibility events and Instagram UI heuristics. Instagram can change its UI at any time, so exact detection must be validated on real devices and is not guaranteed by the platform.
 
 ---
 
 ## ✨ Key Features
 
 * 🔒 **Strict 50 Reels / Day Hardlock**: No custom limit pickers (25, 50, 75, 100 eliminated). When willpower is low, you cannot bargain or increase the limit.
-* 🛑 **Instant Force-Ejection Kick-Out**: The millisecond you attempt to scroll reel #51, ScrollBattle executes `performGlobalAction(GLOBAL_ACTION_HOME)` to boot Instagram off your screen and launches `LimitReachedScreen` (`FLAG_ACTIVITY_CLEAR_TOP`). Re-launching Instagram triggers instant home ejection before video can stream.
-* 🎯 **Reverse-Engineered Precision Heuristics**: Ported from commercial benchmarks (**BrainPal**) via **REA (Reverse Engineer Anything)**. Targets proprietary ViewPager container IDs (`clips_viewer_view_pager`, `clips_video_container`, `spotlight_container`).
+* 🛑 **50-Reel intervention**: When the counter reaches 50 while the Instagram Reel feed is detected, ScrollBattle moves the user to the Android Home screen and opens the limit screen. Android does not let ordinary apps force-stop Instagram or lock only one Instagram feature at OS level.
+* 🎯 **Instagram-specific detection**: Uses known Instagram accessibility view IDs and a small set of Reel-specific text markers. Instagram updates can change these identifiers.
 * 🛡️ **Negative Filter Engine**: Taps, likes, comments (`layout_comment_thread_edittext`), DMs (`direct_thread_layout`), and profiles are strictly ignored.
-* ⏱️ **800ms Debounce & Event Throttling**: Drops 60Hz content-change event floods from video renderers, eliminating CPU spikes, battery drain, and false multi-counts.
+* ⏱️ **Event deduplication**: Uses a short duplicate-event guard. It reduces duplicate increments but cannot prove that every Android accessibility scroll event represents exactly one new Reel.
 * 🎈 **Draggable Floating Counter Pill**: Real-time `[🧠 Count / 50]` overlay using `TYPE_APPLICATION_OVERLAY` that appears only when Reels are active, stays persistent, and can be smoothly dragged anywhere on screen.
 * 🧩 **1-Tap Home Screen Buddy Widget**: 2x2 launcher widget displaying daily progress and mascot status with 1-tap auto-pinning via `AppWidgetManager.requestPinAppWidget()`.
-* 🧠 **Cognitive Friction Recovery**: Want bonus reels? Solve gamified mental arithmetic challenges (`MathsChallengeScreen`) to force your prefrontal cortex back online.
+* 🧠 **Maths practice**: The optional challenge is for practice only and does not increase or bypass the daily Reel limit.
 
 ---
 
@@ -111,12 +111,12 @@ Release builds on OEM skins (Samsung OneUI, Xiaomi HyperOS, Oppo/Realme ColorOS)
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityEventTypes="typeViewScrolled|typeWindowContentChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
+    android:accessibilityFlags="flagDefault|flagReportViewIds"
     android:canRetrieveWindowContent="true" />
 ```
 
-### 4. Zero-Bypass Ejection
-Non-rooted Android apps cannot kill third-party processes directly. ScrollBattle performs an instantaneous home evacuation:
+### 4. Feed intervention
+Non-rooted Android apps cannot kill third-party processes or directly lock one screen inside Instagram. ScrollBattle uses the accessibility service to move the user to Home when the Reel feed is detected at the limit:
 
 ```kotlin
 private fun enforceLimitIfExceeded() {
@@ -174,7 +174,7 @@ The compiled APK will be generated at:
 ```
 ScrollBattle/
 ├── app/
-│   ├── build.gradle.kts           # Kotlin 2.0 & Jetpack Compose dependencies
+│   ├── build.gradle.kts           # Kotlin & Jetpack Compose dependencies
 │   └── src/main/
 │       ├── AndroidManifest.xml    # Single package 'com.scrollbattle'
 │       ├── res/
