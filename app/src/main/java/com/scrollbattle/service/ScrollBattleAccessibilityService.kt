@@ -107,9 +107,13 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     }
 
     private fun isReelsActive(eventSource: android.view.accessibility.AccessibilityNodeInfo? = null): Boolean {
-        val root = rootInActiveWindow ?: eventSource ?: return false
+        val activeRoot = rootInActiveWindow
+        val root = when {
+            activeRoot?.packageName?.toString() == "com.instagram.android" -> activeRoot
+            eventSource?.packageName?.toString() == "com.instagram.android" -> eventSource
+            else -> return false
+        }
         try {
-            if (root.packageName?.toString() != "com.instagram.android") return false
             // Exclude Direct Messages and other non-video screens
             val direct = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/direct_thread_layout")
             if (!direct.isNullOrEmpty()) return false
