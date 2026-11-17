@@ -101,7 +101,7 @@ fun LimitReachedScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Instagram has been force-closed to protect your focus. You reached your daily 50-reel limit.",
+                    text = "You reached your daily 50-Reel limit. The Reel feed will remain restricted until the daily reset.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = TextSecondary,
                     textAlign = TextAlign.Center,
@@ -143,9 +143,9 @@ fun LimitReachedScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             ) {
                 PrimaryActionButton(
-                    text = if (state.bonusClaimedToday) "Bonus already claimed for today" else "Start Maths Challenge (+20 Reels)",
+                    text = "Practice Maths Challenge",
                     leadingIcon = Icons.Default.Calculate,
-                    enabled = !state.bonusClaimedToday,
+                    enabled = true,
                     onClick = onStartChallenge
                 )
                 SecondaryActionButton(
