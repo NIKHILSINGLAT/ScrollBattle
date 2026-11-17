@@ -109,7 +109,7 @@ fun MathsChallengeScreen(
                                 color = TextPrimary
                             )
                             Text(
-                                text = "You solved all 6 calculations with cognitive focus. An additional +20 Reels have been added to your daily allowance.",
+                                text = "You solved all 6 calculations with cognitive focus. Your daily Reel limit remains unchanged.",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = TextSecondary,
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
