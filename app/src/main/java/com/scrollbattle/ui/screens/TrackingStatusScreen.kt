@@ -89,54 +89,15 @@ fun TrackingStatusScreen(
 
                         Text(
                             text = when (state.trackingStatus) {
-                                TrackingStatus.READY -> "All required subsystems are operational. Background reel detector is standing by for Instagram launches."
-                                TrackingStatus.PERMISSION_MISSING -> "App usage access or accessibility permissions are missing. Please complete setup in settings."
-                                TrackingStatus.PARTIAL_TRACKING -> "Usage duration is active, but vertical swipe scroll detection is running in estimated mode."
-                                TrackingStatus.TESTING -> "Running on-device diagnostic detection test. Simulating reel transition events."
-                                TrackingStatus.UNAVAILABLE -> "Instagram tracking service is currently halted by system battery optimizer."
+                                TrackingStatus.READY -> "Accessibility monitoring and overlay permissions are enabled. Reel detection still depends on Instagram's interface."
+                                TrackingStatus.PERMISSION_MISSING -> "Enable ScrollBattle's Accessibility Service and grant overlay permission to use the Reel counter."
+                                TrackingStatus.PARTIAL_TRACKING -> "Some setup permissions are missing. Reel counting requires the Accessibility Service."
+                                TrackingStatus.TESTING -> "A diagnostic state is selected. This does not represent a live detection test."
+                                TrackingStatus.UNAVAILABLE -> "The Accessibility Service is not currently available."
                             },
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
-                    }
-                }
-            }
-
-            // Status Selector Test Chips
-            item {
-                Text(
-                    text = "Simulate Readiness States",
-                    style = MaterialTheme.typography.labelSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = TextSecondary
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    listOf(
-                        TrackingStatus.READY to "Ready",
-                        TrackingStatus.PERMISSION_MISSING to "Incomplete",
-                        TrackingStatus.PARTIAL_TRACKING to "Limited"
-                    ).forEach { (status, label) ->
-                        val isSelected = state.trackingStatus == status
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(if (isSelected) PrimaryOrange else SurfaceElevated)
-                                .clickable { onSetTrackingStatus(status) }
-                                .padding(vertical = 10.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = label,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = if (isSelected) CanvasBackground else TextPrimary
-                            )
-                        }
                     }
                 }
             }
@@ -154,8 +115,8 @@ fun TrackingStatusScreen(
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     DiagnosticCheckRow(
-                        title = "Usage Access Authorization",
-                        subtitle = "Checks foreground package detection",
+                        title = "Optional Usage Access",
+                        subtitle = "Not required for Instagram Reel counting",
                         isPassed = state.usageAccessGranted
                     )
                     DiagnosticCheckRow(
@@ -168,22 +129,11 @@ fun TrackingStatusScreen(
                         subtitle = "Floating counter pill & limit interruption card",
                         isPassed = state.overlayPermissionGranted
                     )
-                    DiagnosticCheckRow(
-                        title = "Battery Optimization Exemption",
-                        subtitle = "Allows background daily reset at 04:00 AM",
-                        isPassed = state.batteryOptimizationIgnored
-                    )
                 }
             }
 
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                SecondaryActionButton(
-                    text = "Run 30s Detection Test",
-                    leadingIcon = Icons.Default.PlayCircle,
-                    onClick = onTestDetection
-                )
-                Spacer(modifier = Modifier.height(10.dp))
                 PrimaryActionButton(
                     text = "Go to Dashboard",
                     trailingIcon = Icons.Default.ArrowForward,
