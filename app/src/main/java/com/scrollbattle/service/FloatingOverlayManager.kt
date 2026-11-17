@@ -36,11 +36,7 @@ class FloatingOverlayManager(private val context: Context) {
 
     private fun getOverlayType(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (android.provider.Settings.canDrawOverlays(context)) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-            }
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
             @Suppress("DEPRECATION")
             WindowManager.LayoutParams.TYPE_PHONE
@@ -66,6 +62,7 @@ class FloatingOverlayManager(private val context: Context) {
     // FLOATING LIVE COUNTER PILL (DRAGGABLE)
     // ==========================================
     fun showPill(currentReels: Int, totalAllowance: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(context)) return
         if (isPillShowing) {
             updatePill(currentReels, totalAllowance)
             return
@@ -259,6 +256,7 @@ class FloatingOverlayManager(private val context: Context) {
         onStartChallenge: () -> Unit,
         onDoneForToday: () -> Unit
     ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(context)) return
         if (isInterruptionShowing) return
 
         try {
