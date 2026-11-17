@@ -107,6 +107,20 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
         return true
     }
 
+    private fun hasViewId(root: android.view.accessibility.AccessibilityNodeInfo, viewId: String): Boolean {
+        val matches = root.findAccessibilityNodeInfosByViewId(viewId)
+        val found = matches.isNotEmpty()
+        matches.forEach { it.recycle() }
+        return found
+    }
+
+    private fun hasText(root: android.view.accessibility.AccessibilityNodeInfo, text: String): Boolean {
+        val matches = root.findAccessibilityNodeInfosByText(text)
+        val found = matches.isNotEmpty()
+        matches.forEach { it.recycle() }
+        return found
+    }
+
     private fun isReelsActive(eventSource: android.view.accessibility.AccessibilityNodeInfo? = null): Boolean {
         val activeRoot = rootInActiveWindow
         val root = when {
@@ -116,8 +130,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
         }
         try {
             // Exclude Direct Messages and other non-video screens
-            val direct = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/direct_thread_layout")
-            if (!direct.isNullOrEmpty()) return false
+            if (hasViewId(root, "com.instagram.android:id/direct_thread_layout")) return false
 
             // Direct checks for verified short-video containers (from BrainPal reverse-engineering)
             val containerIds = listOf(
@@ -130,8 +143,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                 "com.instagram.android:id/reel_viewer_media_layout",
              )
             for (id in containerIds) {
-                val nodes = root.findAccessibilityNodeInfosByViewId(id)
-                if (!nodes.isNullOrEmpty()) return true
+                if (hasViewId(root, id)) return true
             }
 
             // Check event source's ID
@@ -143,13 +155,10 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             // Fallback: Check for distinct Reels UI text markers (for newer or obfuscated Instagram builds)
             val reelsMarkers = listOf("Original audio", "Reel by", "Use audio")
             for (marker in reelsMarkers) {
-                val nodes = root.findAccessibilityNodeInfosByText(marker)
-                if (!nodes.isNullOrEmpty()) {
-                    val homeHeader = root.findAccessibilityNodeInfosByText("Instagram")
-                    val homeLogo = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/action_bar_home_logo")
-                    if (homeHeader.isNullOrEmpty() && homeLogo.isNullOrEmpty()) {
-                        return true
-                    }
+                if (hasText(root, marker)) {
+                    val homeHeader = hasText(root, "Instagram")
+                    val homeLogo = hasViewId(root, "com.instagram.android:id/action_bar_home_logo")
+                    if (!homeHeader && !homeLogo) return true
                 }
             }
         } catch (e: Exception) {
