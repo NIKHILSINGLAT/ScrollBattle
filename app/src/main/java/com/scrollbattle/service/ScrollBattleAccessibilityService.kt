@@ -119,9 +119,6 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             val direct = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/direct_thread_layout")
             if (!direct.isNullOrEmpty()) return false
 
-            val commentBox = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/layout_comment_thread_edittext")
-            if (!commentBox.isNullOrEmpty()) return false
-
             // Direct checks for verified short-video containers (from BrainPal reverse-engineering)
             val containerIds = listOf(
                 "com.instagram.android:id/clips_viewer_view_pager",
@@ -157,6 +154,16 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             }
         } catch (e: Exception) {
             // ignore
+        }
+        return false
+    }
+
+    private fun isReelPagerScroll(event: AccessibilityEvent): Boolean {
+        var node = event.source ?: return false
+        repeat(12) {
+            val id = node.viewIdResourceName.orEmpty().lowercase()
+            if (id.contains("clips") || id.contains("reel")) return true
+            node = node.parent ?: return false
         }
         return false
     }
@@ -253,8 +260,8 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                 }
             }
 
-            // Only count if verified inside Reels container
-            if (!isReelsActive(event.source)) {
+            // Only count vertical scrolls originating in the Reel pager hierarchy.
+            if (!isReelPagerScroll(event)) {
                 return
             }
 
