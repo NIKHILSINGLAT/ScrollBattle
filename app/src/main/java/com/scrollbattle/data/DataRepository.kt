@@ -61,7 +61,43 @@ class DefaultScrollBattleRepository(
 
     private fun getTodayDateString(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return sdf.format(Date())
+        return sdf.format(Date(System.currentTimeMillis() - 4 * 60 * 60 * 1000L))
+    }
+
+    private fun readRecentSessions(): List<ScrollSession> {
+        val raw = prefs?.getString("recent_sessions", null) ?: return emptyList()
+        return try {
+            val array = org.json.JSONArray(raw)
+            val sessions = mutableListOf<ScrollSession>()
+            for (index in 0 until array.length()) {
+                val item = array.optJSONObject(index) ?: continue
+                sessions.add(ScrollSession(
+                    id = item.optString("id"),
+                    timeLabel = item.optString("timeLabel"),
+                    durationMinutes = item.optInt("durationMinutes"),
+                    reelCount = item.optInt("reelCount"),
+                    periodTag = item.optString("periodTag"),
+                    paceTag = item.optString("paceTag")
+                ))
+            }
+            sessions
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun serializeRecentSessions(sessions: List<ScrollSession>): String {
+        val array = org.json.JSONArray()
+        sessions.forEach { session ->
+            array.put(org.json.JSONObject()
+                .put("id", session.id)
+                .put("timeLabel", session.timeLabel)
+                .put("durationMinutes", session.durationMinutes)
+                .put("reelCount", session.reelCount)
+                .put("periodTag", session.periodTag)
+                .put("paceTag", session.paceTag))
+        }
+        return array.toString()
     }
 
     private fun loadInitialState(): ScrollBattleState {
@@ -93,9 +129,12 @@ class DefaultScrollBattleRepository(
 
         val initial = defaultState.copy(
             todayReels = todayReels,
+            todayDurationMinutes = if (isNewDay) 0 else prefs.getInt("today_duration_minutes", 0),
+            todaySessionsCount = if (isNewDay) 0 else prefs.getInt("today_sessions_count", 0),
+            recentSessions = if (isNewDay) emptyList() else readRecentSessions(),
             baseAllowance = baseLimit,
-            bonusAllowance = bonusAllowance,
-            bonusClaimedToday = bonusClaimed,
+            bonusAllowance = 0,
+            bonusClaimedToday = false,
             settings = appSettings
         )
 
@@ -118,6 +157,9 @@ class DefaultScrollBattleRepository(
     private fun persistState(newState: ScrollBattleState) {
         prefs?.edit()?.apply {
             putInt("today_reels", newState.todayReels)
+            putInt("today_duration_minutes", newState.todayDurationMinutes)
+            putInt("today_sessions_count", newState.todaySessionsCount)
+            putString("recent_sessions", serializeRecentSessions(newState.recentSessions))
             putInt("base_allowance", newState.baseAllowance)
             putInt("bonus_allowance", newState.bonusAllowance)
             putBoolean("bonus_claimed", newState.bonusClaimedToday)
@@ -219,7 +261,7 @@ class DefaultScrollBattleRepository(
             current.copy(
                 todayReels = newToday,
                 todayDurationMinutes = estimatedMinutes,
-                todaySessionsCount = updatedSessions.size,
+                todaySessionsCount = current.todaySessionsCount + if (isNewSession) 1 else 0,
                 recentSessions = updatedSessions,
                 weeklyDays = updatedWeekly
             )
@@ -237,17 +279,14 @@ class DefaultScrollBattleRepository(
     }
 
     override fun unlockBonusAllowance(amount: Int) {
+        // The daily Reel cap is a hard limit; completing a challenge never raises it.
         updateState { current ->
-            if (current.bonusClaimedToday) {
-                current
-            } else {
-                current.copy(
-                    bonusAllowance = current.bonusAllowance + amount,
-                    bonusClaimedToday = true,
-                    challengeCompleted = true,
-                    challengeFeedback = "Challenge completed! +$amount Reels unlocked."
-                )
-            }
+            current.copy(
+                bonusAllowance = 0,
+                bonusClaimedToday = true,
+                challengeCompleted = true,
+                challengeFeedback = "Challenge completed. Your daily Reel limit remains unchanged."
+            )
         }
     }
 
