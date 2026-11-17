@@ -22,14 +22,14 @@ class ScrollBattleViewModelTest {
     }
 
     @Test
-    fun setDailyLimit_updatesAllowanceAndRemaining() = runTest {
+    fun setDailyLimit_cannotChangeFixedDailyCap() = runTest {
         val viewModel = ScrollBattleViewModel()
         viewModel.setDailyLimit(75)
         val state = viewModel.uiState.first()
 
-        assertEquals(75, state.baseAllowance)
-        assertEquals(75, state.totalAllowance)
-        assertEquals(75, state.remainingReels)
+        assertEquals(50, state.baseAllowance)
+        assertEquals(50, state.totalAllowance)
+        assertEquals(50, state.remainingReels)
     }
 
     @Test
@@ -64,7 +64,7 @@ class ScrollBattleViewModelTest {
         assertEquals(0, state.todayReels)
         assertEquals(0, state.todayDurationMinutes)
         assertEquals(0, state.recentSessions.size)
-        assertEquals(75, state.baseAllowance) // preserved setting
+        assertEquals(50, state.baseAllowance) // fixed product limit
     }
 
     @Test
@@ -72,7 +72,7 @@ class ScrollBattleViewModelTest {
         val viewModel = ScrollBattleViewModel()
         viewModel.simulateReelScroll()
         viewModel.setDailyLimit(100)
-        assertEquals(100, viewModel.uiState.first().baseAllowance)
+        assertEquals(50, viewModel.uiState.first().baseAllowance)
 
         viewModel.resetSettings()
         val state = viewModel.uiState.first()
