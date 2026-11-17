@@ -183,7 +183,7 @@ fun BattleScreen(
                                 .padding(12.dp)
                         ) {
                             Text(
-                                text = "Strict Boundary: 50 Reels/day. At 50 Reels, Instagram is immediately locked and force-closed.",
+                                text = "Strict boundary: 50 Reels/day. At 50, ScrollBattle exits the detected Instagram Reel feed.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = TextSecondary
                             )
