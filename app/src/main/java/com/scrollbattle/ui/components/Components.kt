@@ -503,7 +503,7 @@ fun AnalyticsBarChart(
             val isSelected = index == selectedIndex
             val heightFraction = (day.reelsCount.toFloat() / maxCount).coerceIn(0.1f, 1f)
             val barColor = when {
-                day.reelsCount > day.allowance -> CriticalRed
+                day.reelsCount >= day.allowance && day.reelsCount > 0 -> CriticalRed
                 day.reelsCount >= 40 -> AccentGold
                 isSelected -> PrimaryOrange
                 else -> TextSecondary.copy(alpha = 0.4f)
