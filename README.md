@@ -50,9 +50,9 @@ flowchart TD
     end
 
     subgraph Detection_Engine [Precision Heuristic Engine]
-        Bus --> Throttler{400ms Duplicate Guard}
-        Throttler -- "< 400ms" --> Drop[Drop / Ignore]
-        Throttler -- ">= 400ms" --> Evaluator[Node Hierarchy Evaluator]
+        Bus --> Throttler{250ms Duplicate Guard}
+        Throttler -- "< 250ms" --> Drop[Drop / Ignore]
+        Throttler -- ">= 250ms" --> Evaluator[Node Hierarchy Evaluator]
         Evaluator --> Match{Container ID Match?}
         Match -- "Comment / DM / Non-Reel" --> Drop
         Match -- "Instagram Reel feed" --> Count[Increment Daily Counter]
