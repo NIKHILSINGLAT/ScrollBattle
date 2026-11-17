@@ -21,6 +21,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
 
     private var currentPackage: String? = null
     private var limitInterventionActive = false
+    private var reelsFeedActive = false
 
     companion object {
         var isServiceRunning = false
@@ -168,6 +169,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
                 currentPackage = eventPackage
                 limitInterventionActive = false
+                reelsFeedActive = false
                 overlayManager.hideAll()
             }
             return
@@ -182,10 +184,24 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
         // Enforce only while the Instagram short-video feed is actually detected.
         val reelsActive = isReelsActive(event.source)
         if (!reelsActive) {
+            reelsFeedActive = false
             limitInterventionActive = false
             if (overlayManager.isPillVisible) overlayManager.hidePill()
             return
         }
+
+        // Count the first Reel when the user enters the Reel feed, not only later swipes.
+        if (!reelsFeedActive) {
+            reelsFeedActive = true
+            if (enforceLimitIfExceeded()) return
+            lastSwipeTimestamp = System.currentTimeMillis()
+            repository.recordReelTransition("Instagram Reels")
+            if (enforceLimitIfExceeded()) return
+            val state = repository.state.value
+            overlayManager.showPill(state.todayReels, state.totalAllowance)
+            return
+        }
+
         if (enforceLimitIfExceeded()) return
 
         // 1. App or Window transition
@@ -291,7 +307,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     }
 
     override fun onInterrupt() {
-        overlayManager.hideAll()
+        if (::overlayManager.isInitialized) overlayManager.hideAll()
     }
 
     override fun onDestroy() {
@@ -302,7 +318,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        overlayManager.hideAll()
+        if (::overlayManager.isInitialized) overlayManager.hideAll()
         serviceScope.cancel()
     }
 }
