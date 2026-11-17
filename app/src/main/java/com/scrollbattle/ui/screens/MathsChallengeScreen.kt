@@ -33,7 +33,7 @@ fun MathsChallengeScreen(
         topBar = {
             ScrollBattleTopBar(
                 title = "Active Challenge",
-                subtitle = "Earn your next 20 Reels",
+                subtitle = "Optional mental maths practice",
                 canNavigateBack = true,
                 onNavigateBack = onNavigateBack
             )
