@@ -441,17 +441,7 @@ class FloatingOverlayManager(private val context: Context) {
                 interruptionView = rootLayout
                 isInterruptionShowing = true
             } catch (e: Exception) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                    params.type == WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY &&
-                    android.provider.Settings.canDrawOverlays(context)
-                ) {
-                    params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                    windowManager.addView(rootLayout, params)
-                    interruptionView = rootLayout
-                    isInterruptionShowing = true
-                } else {
-                    e.printStackTrace()
-                }
+                e.printStackTrace()
             }
         } catch (e: Exception) {
             e.printStackTrace()
