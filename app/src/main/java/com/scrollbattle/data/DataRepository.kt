@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Calendar
 import java.util.Locale
 
 interface ScrollBattleRepository {
@@ -101,6 +102,84 @@ class DefaultScrollBattleRepository(
         return array.toString()
     }
 
+    private fun readWeeklyDays(fallback: List<DailyAnalytics>): List<DailyAnalytics> {
+        val raw = prefs?.getString("weekly_days", null) ?: return fallback
+        return try {
+            val array = org.json.JSONArray(raw)
+            val days = mutableListOf<DailyAnalytics>()
+            for (index in 0 until array.length()) {
+                val item = array.optJSONObject(index) ?: continue
+                days.add(DailyAnalytics(
+                    dayName = item.optString("dayName"),
+                    shortDay = item.optString("shortDay"),
+                    reelsCount = item.optInt("reelsCount"),
+                    allowance = item.optInt("allowance", 50),
+                    durationMinutes = item.optInt("durationMinutes"),
+                    sessionCount = item.optInt("sessionCount"),
+                    status = item.optString("status"),
+                    isToday = item.optBoolean("isToday"),
+                    dateKey = item.optString("dateKey")
+                ))
+            }
+            if (days.isEmpty()) fallback else days
+        } catch (_: Exception) {
+            fallback
+        }
+    }
+
+    private fun serializeWeeklyDays(days: List<DailyAnalytics>): String {
+        val array = org.json.JSONArray()
+        days.forEach { day ->
+            array.put(org.json.JSONObject()
+                .put("dayName", day.dayName)
+                .put("shortDay", day.shortDay)
+                .put("reelsCount", day.reelsCount)
+                .put("allowance", day.allowance)
+                .put("durationMinutes", day.durationMinutes)
+                .put("sessionCount", day.sessionCount)
+                .put("status", day.status)
+                .put("isToday", day.isToday)
+                .put("dateKey", day.dateKey))
+        }
+        return array.toString()
+    }
+
+    private fun buildWeeklyDays(todayDate: String, existing: List<DailyAnalytics>): List<DailyAnalytics> {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+        val shortFormat = SimpleDateFormat("EEE", Locale.getDefault())
+        val recordsByDate = existing.filter { it.dateKey.isNotBlank() }.associateBy { it.dateKey }
+        val calendar = Calendar.getInstance()
+        calendar.time = dateFormat.parse(todayDate) ?: Date()
+        calendar.add(Calendar.DAY_OF_YEAR, -6)
+        return (0..6).map { index ->
+            val date = calendar.time
+            val dateKey = dateFormat.format(date)
+            val previous = recordsByDate[dateKey]
+            val isToday = index == 6
+            val dayName = dayFormat.format(date)
+            val shortDay = if (isToday) "Today" else shortFormat.format(date)
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+            previous?.copy(
+                dayName = dayName,
+                shortDay = shortDay,
+                allowance = 50,
+                isToday = isToday,
+                dateKey = dateKey
+            ) ?: DailyAnalytics(
+                dayName = dayName,
+                shortDay = shortDay,
+                reelsCount = 0,
+                allowance = 50,
+                durationMinutes = 0,
+                sessionCount = 0,
+                status = if (isToday) "Within Limit" else "No Activity",
+                isToday = isToday,
+                dateKey = dateKey
+            )
+        }
+    }
+
     private fun loadInitialState(): ScrollBattleState {
         val todayStr = getTodayDateString()
         val defaultState = ScrollBattleState()
@@ -138,6 +217,7 @@ class DefaultScrollBattleRepository(
             todayDurationMinutes = if (isNewDay) 0 else prefs.getInt("today_duration_minutes", 0),
             todaySessionsCount = if (isNewDay) 0 else prefs.getInt("today_sessions_count", 0),
             recentSessions = if (isNewDay) emptyList() else readRecentSessions(),
+            weeklyDays = buildWeeklyDays(todayStr, readWeeklyDays(defaultState.weeklyDays)),
             baseAllowance = baseLimit,
             bonusAllowance = 0,
             bonusClaimedToday = false,
@@ -166,6 +246,7 @@ class DefaultScrollBattleRepository(
             putInt("today_duration_minutes", newState.todayDurationMinutes)
             putInt("today_sessions_count", newState.todaySessionsCount)
             putString("recent_sessions", serializeRecentSessions(newState.recentSessions))
+            putString("weekly_days", serializeWeeklyDays(newState.weeklyDays))
             putInt("base_allowance", newState.baseAllowance)
             putInt("bonus_allowance", newState.bonusAllowance)
             putBoolean("bonus_claimed", newState.bonusClaimedToday)
@@ -201,14 +282,7 @@ class DefaultScrollBattleRepository(
                 selectedOptionIndex = null,
                 challengeFeedback = null,
                 challengeMistakes = 0,
-                weeklyDays = _state.value.weeklyDays.map { day ->
-                    if (day.isToday) day.copy(
-                        reelsCount = 0,
-                        durationMinutes = 0,
-                        sessionCount = 0,
-                        status = "Within Limit"
-                    ) else day
-                }
+                weeklyDays = buildWeeklyDays(today, _state.value.weeklyDays)
             )
         } else {
             _state.value
@@ -263,8 +337,9 @@ class DefaultScrollBattleRepository(
             }
 
             // Update current today in weekly list as well
+            val todayDate = getTodayDateString()
             val updatedWeekly = current.weeklyDays.map { day ->
-                if (day.isToday) day.copy(
+                if (day.dateKey == todayDate || (day.isToday && day.dateKey.isBlank())) day.copy(
                     reelsCount = newToday,
                     durationMinutes = estimatedMinutes,
                     sessionCount = updatedSessions.size
