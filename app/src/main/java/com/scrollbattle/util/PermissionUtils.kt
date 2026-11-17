@@ -64,7 +64,7 @@ object PermissionUtils {
 
         return when {
             accessibility && overlay -> TrackingStatus.READY
-            accessibility || usage -> TrackingStatus.PARTIAL_TRACKING
+            accessibility -> TrackingStatus.PARTIAL_TRACKING
             else -> TrackingStatus.PERMISSION_MISSING
         }
     }
