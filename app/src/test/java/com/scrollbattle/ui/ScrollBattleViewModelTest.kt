@@ -33,7 +33,7 @@ class ScrollBattleViewModelTest {
     }
 
     @Test
-    fun mathsChallenge_correctSubmission_grantsBonusOnce() = runTest {
+    fun mathsChallenge_completion_doesNotBypassHardDailyLimit() = runTest {
         val viewModel = ScrollBattleViewModel()
 
         // Solve all 6 questions correctly
@@ -46,12 +46,12 @@ class ScrollBattleViewModelTest {
         val state = viewModel.uiState.first()
         assertTrue(state.challengeCompleted)
         assertTrue(state.bonusClaimedToday)
-        assertEquals(20, state.bonusAllowance)
-        assertEquals(70, state.totalAllowance)
+        assertEquals(0, state.bonusAllowance)
+        assertEquals(50, state.totalAllowance)
 
         // Try submitting again; should not grant bonus repeatedly
         viewModel.submitChallengeAnswer()
-        assertEquals(20, viewModel.uiState.first().bonusAllowance)
+        assertEquals(0, viewModel.uiState.first().bonusAllowance)
     }
 
     @Test
