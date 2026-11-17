@@ -449,7 +449,14 @@ class DefaultScrollBattleRepository(
                 todayDurationMinutes = 0,
                 todaySessionsCount = 0,
                 recentSessions = emptyList(),
-                weeklyDays = current.weeklyDays.map { it.copy(reelsCount = 0, durationMinutes = 0, sessionCount = 0) }
+                weeklyDays = current.weeklyDays.map { day ->
+                    day.copy(
+                        reelsCount = 0,
+                        durationMinutes = 0,
+                        sessionCount = 0,
+                        status = if (day.isToday) "Within Limit" else "No Activity"
+                    )
+                }
             )
         }
     }
