@@ -42,7 +42,7 @@ Traditional screen-time apps consistently fail because:
 ```mermaid
 flowchart TD
     subgraph Target_Apps [Monitored Applications]
-        IG[Instagram Reels / YouTube Shorts]
+        IG[Instagram Reels]
     end
 
     subgraph Accessibility_Bus [System Accessibility Event Bus]
@@ -50,12 +50,12 @@ flowchart TD
     end
 
     subgraph Detection_Engine [Precision Heuristic Engine]
-        Bus --> Throttler{800ms Time Guard}
-        Throttler -- "< 800ms" --> Drop[Drop / Ignore]
-        Throttler -- ">= 800ms" --> Evaluator[Node Hierarchy Evaluator]
+        Bus --> Throttler{400ms Duplicate Guard}
+        Throttler -- "< 400ms" --> Drop[Drop / Ignore]
+        Throttler -- ">= 400ms" --> Evaluator[Node Hierarchy Evaluator]
         Evaluator --> Match{Container ID Match?}
         Match -- "Comment / DM / Non-Reel" --> Drop
-        Match -- "clips_viewer_view_pager" --> Count[Increment Daily Counter]
+        Match -- "Instagram Reel feed" --> Count[Increment Daily Counter]
     end
 
     subgraph Enforcement [Action & Enforcement Layer]
