@@ -83,13 +83,13 @@ fun TroubleshootingScreen(
                             }
                             Column {
                                 Text(
-                                    text = "Telemetry Node Operational",
+                                    text = "On-device status snapshot",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = TextPrimary
                                 )
                                 Text(
-                                    text = "Local database active • 0 uncommitted events",
+                                    text = "Local preferences and recent session records • no cloud telemetry",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = TextSecondary
                                 )
@@ -112,7 +112,7 @@ fun TroubleshootingScreen(
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     SecondaryActionButton(
-                        text = "Check Background Battery Optimization",
+                        text = "Open Battery Optimization Settings",
                         leadingIcon = Icons.Default.BatteryAlert,
                         onClick = {
                             try {
@@ -121,12 +121,6 @@ fun TroubleshootingScreen(
                                 context.startActivity(Intent(Settings.ACTION_SETTINGS))
                             }
                         }
-                    )
-
-                    SecondaryActionButton(
-                        text = "Run Live 30s Detection Test",
-                        leadingIcon = Icons.Default.PlayArrow,
-                        onClick = onTestDetection
                     )
 
                     SecondaryActionButton(
@@ -157,14 +151,14 @@ fun TroubleshootingScreen(
 
                         Text(
                             text = """
-OS: Android (API 36)
+OS: Android ${android.os.Build.VERSION.RELEASE} (API ${android.os.Build.VERSION.SDK_INT})
 App ID: com.scrollbattle
-Architecture: Jetpack Compose + Offline-First
+Architecture: Jetpack Compose + SharedPreferences
 Tracking Status: ${state.trackingStatus.name}
 Usage Access: ${if (state.usageAccessGranted) "GRANTED" else "MISSING"}
 Accessibility: ${if (state.accessibilityGranted) "ACTIVE" else "UNCONFIGURED"}
-Local Events Stored: ${state.recentSessions.size}
-Daily Allowance: ${state.baseAllowance} (+${state.bonusAllowance} bonus)
+Recent Sessions Stored: ${state.recentSessions.size}
+Daily Reel Limit: ${state.totalAllowance}
 """.trimIndent(),
                             style = MaterialTheme.typography.bodySmall,
                             color = TextSecondary
