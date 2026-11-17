@@ -70,7 +70,7 @@ fun DailyDetailsScreen(
                             )
                             StatusBadge(
                                 text = selectedDay.status,
-                                dotColor = if (selectedDay.reelsCount > selectedDay.allowance) CriticalRed else RecoveryGreen
+                                dotColor = if (selectedDay.reelsCount >= selectedDay.allowance && selectedDay.reelsCount > 0) CriticalRed else RecoveryGreen
                             )
                         }
 
