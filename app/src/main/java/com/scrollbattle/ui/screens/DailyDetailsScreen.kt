@@ -87,7 +87,7 @@ fun DailyDetailsScreen(
                                     color = TextPrimary
                                 )
                                 Text(
-                                    text = "${selectedDay.durationMinutes} minutes total scrolling",
+                                    text = "${selectedDay.durationMinutes} estimated minutes scrolling",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = TextSecondary
                                 )
