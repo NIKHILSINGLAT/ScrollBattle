@@ -163,7 +163,7 @@ fun ProgressScreen(
                             }
                             StatusBadge(
                                 text = "${selectedDay.reelsCount} Reels",
-                                dotColor = if (selectedDay.reelsCount > selectedDay.allowance) CriticalRed else RecoveryGreen
+                                dotColor = if (selectedDay.reelsCount >= selectedDay.allowance && selectedDay.reelsCount > 0) CriticalRed else RecoveryGreen
                             )
                         }
 
