@@ -107,9 +107,9 @@ class DefaultScrollBattleRepository(
         if (prefs == null) return defaultState
 
         val lastDate = prefs.getString("last_date", "") ?: ""
-        val isNewDay = lastDate.isNotEmpty() && lastDate != todayStr
+        val isNewDay = lastDate != todayStr
 
-        val baseLimit = prefs.getInt("daily_limit", prefs.getInt("base_allowance", 50)).coerceIn(1, 500)
+        val baseLimit = 50
         val warningThreshold = prefs.getInt("warning_threshold", defaultState.settings.warningThresholdPercent)
         val hardIntervention = prefs.getBoolean("hard_intervention", defaultState.settings.hardIntervention)
 
@@ -279,11 +279,11 @@ class DefaultScrollBattleRepository(
     }
 
     override fun setDailyLimit(limit: Int) {
-        val safeLimit = limit.coerceIn(1, 500)
+        // The product requirement is a fixed 50-Reel daily cap.
         updateState { current ->
             current.copy(
-                baseAllowance = safeLimit,
-                settings = current.settings.copy(dailyLimit = safeLimit)
+                baseAllowance = 50,
+                settings = current.settings.copy(dailyLimit = 50)
             )
         }
     }
