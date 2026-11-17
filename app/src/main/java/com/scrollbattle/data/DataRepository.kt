@@ -73,7 +73,7 @@ class DefaultScrollBattleRepository(
         val lastDate = prefs.getString("last_date", "") ?: ""
         val isNewDay = lastDate.isNotEmpty() && lastDate != todayStr
 
-        val baseLimit = 50
+        val baseLimit = prefs.getInt("daily_limit", prefs.getInt("base_allowance", 50)).coerceIn(1, 500)
         val warningThreshold = prefs.getInt("warning_threshold", defaultState.settings.warningThresholdPercent)
         val hardIntervention = prefs.getBoolean("hard_intervention", defaultState.settings.hardIntervention)
 
@@ -124,16 +124,45 @@ class DefaultScrollBattleRepository(
             putInt("daily_limit", newState.settings.dailyLimit)
             putInt("warning_threshold", newState.settings.warningThresholdPercent)
             putBoolean("hard_intervention", newState.settings.hardIntervention)
-            putString("last_date", getTodayDateString())
             apply()
         }
         context?.let { com.scrollbattle.widget.BrainPalWidgetProvider.updateAllWidgets(it) }
     }
 
     override fun updateState(transform: (ScrollBattleState) -> ScrollBattleState) {
-        val updated = transform(_state.value)
+        val today = getTodayDateString()
+        val storedDate = prefs?.getString("last_date", today) ?: today
+        val startingState = if (storedDate != today) {
+            lastSessionTimestamp = 0L
+            lastRecordedTimestamp = 0L
+            _state.value.copy(
+                todayReels = 0,
+                todayDurationMinutes = 0,
+                todaySessionsCount = 0,
+                recentSessions = emptyList(),
+                bonusAllowance = 0,
+                bonusClaimedToday = false,
+                challengeCompleted = false,
+                activeChallengeQuestionIndex = 0,
+                selectedOptionIndex = null,
+                challengeFeedback = null,
+                challengeMistakes = 0,
+                weeklyDays = _state.value.weeklyDays.map { day ->
+                    if (day.isToday) day.copy(
+                        reelsCount = 0,
+                        durationMinutes = 0,
+                        sessionCount = 0,
+                        status = "Within Limit"
+                    ) else day
+                }
+            )
+        } else {
+            _state.value
+        }
+        val updated = transform(startingState)
         _state.value = updated
         persistState(updated)
+        prefs?.edit()?.putString("last_date", today)?.apply()
     }
 
     private var lastRecordedTimestamp: Long = 0L
@@ -198,10 +227,11 @@ class DefaultScrollBattleRepository(
     }
 
     override fun setDailyLimit(limit: Int) {
+        val safeLimit = limit.coerceIn(1, 500)
         updateState { current ->
             current.copy(
-                baseAllowance = limit,
-                settings = current.settings.copy(dailyLimit = limit)
+                baseAllowance = safeLimit,
+                settings = current.settings.copy(dailyLimit = safeLimit)
             )
         }
     }
