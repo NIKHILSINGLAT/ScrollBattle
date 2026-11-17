@@ -90,7 +90,7 @@ fun LimitReachedScreen(
                 )
 
                 Text(
-                    text = "Instagram is Locked.",
+                    text = "Reels are locked.",
                     style = MaterialTheme.typography.headlineSmall,
                     color = CriticalRed,
                     fontWeight = FontWeight.SemiBold,
