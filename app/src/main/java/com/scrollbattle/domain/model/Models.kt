@@ -25,7 +25,8 @@ data class DailyAnalytics(
     val durationMinutes: Int,
     val sessionCount: Int,
     val status: String,
-    val isToday: Boolean = false
+    val isToday: Boolean = false,
+    val dateKey: String = ""
 )
 
 data class MathQuestion(
