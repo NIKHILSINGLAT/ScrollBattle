@@ -59,7 +59,6 @@ object PermissionUtils {
 
     fun computeTrackingStatus(context: Context): TrackingStatus {
         val accessibility = isAccessibilityServiceEnabled(context)
-        val usage = isUsageAccessGranted(context)
         val overlay = canDrawOverlays(context)
 
         return when {
