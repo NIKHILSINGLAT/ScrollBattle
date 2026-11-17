@@ -1,13 +1,13 @@
 # 🧠 ScrollBattle — Open-Source Anti-Doomscroll Android Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/Platform-Android%208.0%2B%20(API%2026%2B)-brightgreen.svg)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0-blue.svg)](https://kotlinlang.org)
+[![Platform](https://img.shields.io/badge/Platform-Android%207.0%2B%20(API%2024%2B)-brightgreen.svg)](https://developer.android.com)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.3-blue.svg)](https://kotlinlang.org)
 [![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose%20Material3-purple.svg)](https://developer.android.com/jetpack/compose)
 [![Open Source](https://img.shields.io/badge/Open%20Source-100%25%20Free-orange.svg)](https://github.com/NIKHILSINGLAT/ScrollBattle)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/NIKHILSINGLAT/ScrollBattle/pulls)
 
-> **The adversarial, open-source Android engine that fights short-form video addiction with viewport-level node tracking, a strict 50-reels daily ceiling, and zero-bypass system force-ejection.**
+> **A personal Android focus tool that counts Instagram Reel-feed transitions and blocks access to the entire Instagram app after 50 Reels until 04:00 local time.**
 
 ---
 
@@ -17,23 +17,23 @@ Short-form video feeds (**Instagram Reels, YouTube Shorts, Snapchat Spotlight**)
 
 Traditional screen-time apps consistently fail because:
 1. **The "Soft Dismissal" Fallacy**: They display passive popups with a single-tap *"Give me 15 more minutes"* button. By the time a user sees the alert, their prefrontal cortex is already depleted.
-2. **App-Wide Blunt Hammers**: Blocking all of Instagram or YouTube cuts off vital messaging (DMs, family groups, business inquiries). Users simply disable the blocker.
+2. **Whole-app lock by choice**: ScrollBattle deliberately blocks all of Instagram after 50 Reels, including DMs, profiles and the normal feed, because the user's goal is to stop using Instagram for the rest of the day.
 3. **Inaccurate Scroll Detection**: Naive accessibility listeners count every touch, comment tap, like, and direct message as a video scroll, corrupting metrics and eroding user trust.
 
-**ScrollBattle solves this.** It isolates **only short-form video ViewPagers**, tracks reel swipes with precision heuristics, maintains a floating on-screen counter, and **physically kicks you out of Instagram to the Android Home screen** the moment you exceed your daily allowance.
+**ScrollBattle is designed for one primary job:** count Instagram Reel-feed transitions and move the user out of Instagram when the 50-Reel daily allowance is reached. Reopening Instagram triggers the same block until the 04:00 local-time reset. Detection uses Android Accessibility events and Instagram UI heuristics. Instagram can change its UI at any time, so exact detection must be validated on real devices and is not guaranteed by the platform.
 
 ---
 
 ## ✨ Key Features
 
 * 🔒 **Strict 50 Reels / Day Hardlock**: No custom limit pickers (25, 50, 75, 100 eliminated). When willpower is low, you cannot bargain or increase the limit.
-* 🛑 **Instant Force-Ejection Kick-Out**: The millisecond you attempt to scroll reel #51, ScrollBattle executes `performGlobalAction(GLOBAL_ACTION_HOME)` to boot Instagram off your screen and launches `LimitReachedScreen` (`FLAG_ACTIVITY_CLEAR_TOP`). Re-launching Instagram triggers instant home ejection before video can stream.
-* 🎯 **Reverse-Engineered Precision Heuristics**: Ported from commercial benchmarks (**BrainPal**) via **REA (Reverse Engineer Anything)**. Targets proprietary ViewPager container IDs (`clips_viewer_view_pager`, `clips_video_container`, `spotlight_container`).
+* 🛑 **Whole-app Instagram lock**: At Reel 50, ScrollBattle sends the user to Android Home and opens the limit screen. Any subsequent attempt to open Instagram — Reels, Feed, profiles or DMs — is sent back to Home until 04:00 local time. This is an Accessibility-based self-control barrier, not an OS-level force-stop; disabling the Accessibility Service or force-stopping ScrollBattle can bypass it.
+* 🎯 **Instagram-specific detection**: Uses known Instagram accessibility view IDs and a small set of Reel-specific text markers. Instagram updates can change these identifiers.
 * 🛡️ **Negative Filter Engine**: Taps, likes, comments (`layout_comment_thread_edittext`), DMs (`direct_thread_layout`), and profiles are strictly ignored.
-* ⏱️ **800ms Debounce & Event Throttling**: Drops 60Hz content-change event floods from video renderers, eliminating CPU spikes, battery drain, and false multi-counts.
+* ⏱️ **Event deduplication**: Uses a short duplicate-event guard. It reduces duplicate increments but cannot prove that every Android accessibility scroll event represents exactly one new Reel.
 * 🎈 **Draggable Floating Counter Pill**: Real-time `[🧠 Count / 50]` overlay using `TYPE_APPLICATION_OVERLAY` that appears only when Reels are active, stays persistent, and can be smoothly dragged anywhere on screen.
 * 🧩 **1-Tap Home Screen Buddy Widget**: 2x2 launcher widget displaying daily progress and mascot status with 1-tap auto-pinning via `AppWidgetManager.requestPinAppWidget()`.
-* 🧠 **Cognitive Friction Recovery**: Want bonus reels? Solve gamified mental arithmetic challenges (`MathsChallengeScreen`) to force your prefrontal cortex back online.
+* 🧠 **Maths practice**: The optional challenge is for practice only and does not increase or bypass the daily Reel limit.
 
 ---
 
@@ -42,7 +42,7 @@ Traditional screen-time apps consistently fail because:
 ```mermaid
 flowchart TD
     subgraph Target_Apps [Monitored Applications]
-        IG[Instagram Reels / YouTube Shorts]
+        IG[Instagram Reels]
     end
 
     subgraph Accessibility_Bus [System Accessibility Event Bus]
@@ -50,18 +50,20 @@ flowchart TD
     end
 
     subgraph Detection_Engine [Precision Heuristic Engine]
-        Bus --> Throttler{800ms Time Guard}
-        Throttler -- "< 800ms" --> Drop[Drop / Ignore]
-        Throttler -- ">= 800ms" --> Evaluator[Node Hierarchy Evaluator]
+        Bus --> Throttler{250ms Duplicate Guard}
+        Throttler -- "< 250ms" --> Drop[Drop / Ignore]
+        Throttler -- ">= 250ms" --> Evaluator[Node Hierarchy Evaluator]
         Evaluator --> Match{Container ID Match?}
         Match -- "Comment / DM / Non-Reel" --> Drop
-        Match -- "clips_viewer_view_pager" --> Count[Increment Daily Counter]
+        Match -- "Instagram Reel feed" --> Count[Increment Daily Counter]
     end
 
     subgraph Enforcement [Action & Enforcement Layer]
         Count --> LimitCheck{Count >= 50?}
-        LimitCheck -- "Yes" --> Kick[performGlobalAction: GLOBAL_ACTION_HOME]
-        Kick --> LockScreen[Launch LimitReachedScreen CLEAR_TOP]
+        LimitCheck -- "Yes" --> Kick[Return to Android Home]
+        Kick --> LockScreen[Launch LimitReachedScreen]
+        LockScreen --> Reopen[User opens Instagram again]
+        Reopen --> Kick
         LimitCheck -- "No" --> PillUpdate[Update Floating Overlay Pill]
         PillUpdate --> WidgetUpdate[Sync 2x2 Home Screen Widget]
     end
@@ -111,25 +113,14 @@ Release builds on OEM skins (Samsung OneUI, Xiaomi HyperOS, Oppo/Realme ColorOS)
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityEventTypes="typeViewScrolled|typeWindowContentChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows|flagIncludeNotImportantViews"
+    android:accessibilityFlags="flagDefault|flagReportViewIds"
     android:canRetrieveWindowContent="true" />
 ```
 
-### 4. Zero-Bypass Ejection
-Non-rooted Android apps cannot kill third-party processes directly. ScrollBattle performs an instantaneous home evacuation:
+### 4. Whole-app Instagram lock
+When the Reel counter reaches 50, ScrollBattle returns the user to Android Home and opens the limit screen. The Accessibility Service watches for Instagram foreground events. If Instagram is opened again while the daily counter is still at 50, ScrollBattle immediately sends the user back to Home, regardless of whether the user opened Reels, the normal feed, a profile or DMs.
 
-```kotlin
-private fun enforceLimitIfExceeded() {
-    performGlobalAction(GLOBAL_ACTION_HOME)
-    overlayManager.hidePill()
-
-    val lockIntent = Intent(this, MainActivity::class.java).apply {
-        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        putExtra("NAV_KEY", "limit_reached")
-    }
-    startActivity(lockIntent)
-}
-```
+The daily counter uses a 04:00 local-time boundary. The lock therefore expires when the app's daily counter resets at 04:00. This is an Accessibility-based deterrent, not a tamper-proof Android app lock: users can bypass it by disabling ScrollBattle's Accessibility Service, force-stopping ScrollBattle, or uninstalling it. Android does not allow an ordinary app to force-stop Instagram or guarantee control over another app.
 
 ---
 
@@ -174,7 +165,7 @@ The compiled APK will be generated at:
 ```
 ScrollBattle/
 ├── app/
-│   ├── build.gradle.kts           # Kotlin 2.0 & Jetpack Compose dependencies
+│   ├── build.gradle.kts           # Kotlin & Jetpack Compose dependencies
 │   └── src/main/
 │       ├── AndroidManifest.xml    # Single package 'com.scrollbattle'
 │       ├── res/

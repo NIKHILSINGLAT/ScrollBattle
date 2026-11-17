@@ -59,11 +59,11 @@ object PermissionUtils {
 
     fun computeTrackingStatus(context: Context): TrackingStatus {
         val accessibility = isAccessibilityServiceEnabled(context)
-        val usage = isUsageAccessGranted(context)
+        val overlay = canDrawOverlays(context)
 
         return when {
-            accessibility -> TrackingStatus.READY
-            usage -> TrackingStatus.PARTIAL_TRACKING
+            accessibility && overlay -> TrackingStatus.READY
+            accessibility -> TrackingStatus.PARTIAL_TRACKING
             else -> TrackingStatus.PERMISSION_MISSING
         }
     }

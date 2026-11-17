@@ -25,7 +25,8 @@ data class DailyAnalytics(
     val durationMinutes: Int,
     val sessionCount: Int,
     val status: String,
-    val isToday: Boolean = false
+    val isToday: Boolean = false,
+    val dateKey: String = ""
 )
 
 data class MathQuestion(
@@ -82,7 +83,7 @@ data class ScrollBattleState(
         MathQuestion(6, "Calculate: 12 * 7 - 35", listOf("47", "49", "51", "53"), 1)
     )
 ) {
-    val totalAllowance: Int get() = baseAllowance + bonusAllowance
+    val totalAllowance: Int get() = baseAllowance
     val remainingReels: Int get() = (totalAllowance - todayReels).coerceAtLeast(0)
     val percentageUsed: Int get() = if (totalAllowance > 0) ((todayReels.toFloat() / totalAllowance) * 100).toInt().coerceAtMost(100) else 0
     val isLimitExceeded: Boolean get() = todayReels >= totalAllowance

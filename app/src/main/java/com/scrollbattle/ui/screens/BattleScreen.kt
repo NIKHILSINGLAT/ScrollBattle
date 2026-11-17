@@ -150,70 +150,6 @@ fun BattleScreen(
                 }
             }
 
-            // Testing & Simulation Presets
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(CardSurface)
-                        .border(1.dp, BorderSubtle, RoundedCornerShape(20.dp))
-                        .padding(16.dp)
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "QUICK TEST LAB",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = PrimaryOrange
-                            )
-                            StatusBadge(text = "Dev Preset", dotColor = AccentGold)
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(SurfaceSecondary)
-                                .padding(12.dp)
-                        ) {
-                            Text(
-                                text = "Strict Boundary: 50 Reels/day. At 50 Reels, Instagram is immediately locked and force-closed.",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = TextSecondary
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            SecondaryActionButton(
-                                text = "+ Simulate Swipe",
-                                leadingIcon = Icons.Default.Add,
-                                onClick = onSimulateReel,
-                                modifier = Modifier.weight(1f)
-                            )
-                            val context = androidx.compose.ui.platform.LocalContext.current
-                            SecondaryActionButton(
-                                text = "Test Pill Overlay",
-                                leadingIcon = Icons.Default.Visibility,
-                                onClick = {
-                                    val intent = android.content.Intent("com.scrollbattle.ACTION_SHOW_PILL")
-                                    context.sendBroadcast(intent)
-                                },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                    }
-                }
-            }
-
             // Action section
             item {
                 Column(
@@ -222,9 +158,9 @@ fun BattleScreen(
                 ) {
                     if (state.isLimitExceeded) {
                         PrimaryActionButton(
-                            text = if (state.bonusClaimedToday) "Bonus allowance claimed (+20)" else "Start Maths Challenge (+20 Reels)",
+                            text = "Practice Maths Challenge",
                             leadingIcon = Icons.Default.Calculate,
-                            enabled = !state.bonusClaimedToday,
+                            enabled = true,
                             onClick = onStartChallenge
                         )
                         SecondaryActionButton(

@@ -29,6 +29,8 @@ fun ProgressScreen(
     onNavigateToDetails: () -> Unit
 ) {
     val selectedDay = state.weeklyDays.getOrElse(state.selectedAnalyticsDayIndex) { state.weeklyDays.last() }
+    val chartDays = if (state.analyticsTimeSpan == "Day") listOf(selectedDay) else state.weeklyDays
+    val chartSelectedIndex = if (state.analyticsTimeSpan == "Day") 0 else state.selectedAnalyticsDayIndex
 
     Scaffold(
         containerColor = CanvasBackground,
@@ -108,21 +110,23 @@ fun ProgressScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Weekly Consumption",
+                                text = if (state.analyticsTimeSpan == "Day") "Daily Consumption" else "Weekly Consumption",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                                 color = TextPrimary
                             )
                             StatusBadge(
-                                text = "Avg 41 Reels/day",
+                                text = if (state.analyticsTimeSpan == "Day") "Selected day" else "Last 7 days",
                                 dotColor = RecoveryGreen
                             )
                         }
 
                         AnalyticsBarChart(
-                            days = state.weeklyDays,
-                            selectedIndex = state.selectedAnalyticsDayIndex,
-                            onSelectDay = onSelectDay
+                            days = chartDays,
+                            selectedIndex = chartSelectedIndex,
+                            onSelectDay = { index ->
+                                onSelectDay(if (state.analyticsTimeSpan == "Day") state.selectedAnalyticsDayIndex else index)
+                            }
                         )
                     }
                 }
@@ -159,7 +163,7 @@ fun ProgressScreen(
                             }
                             StatusBadge(
                                 text = "${selectedDay.reelsCount} Reels",
-                                dotColor = if (selectedDay.reelsCount > selectedDay.allowance) CriticalRed else RecoveryGreen
+                                dotColor = if (selectedDay.reelsCount >= selectedDay.allowance && selectedDay.reelsCount > 0) CriticalRed else RecoveryGreen
                             )
                         }
 
@@ -168,16 +172,16 @@ fun ProgressScreen(
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             MetricCard(
-                                title = "Duration",
+                                title = "Est. duration",
                                 value = "${selectedDay.durationMinutes}m",
-                                subtitle = "Screen time",
+                                subtitle = "Estimated scrolling",
                                 icon = Icons.Default.Schedule,
                                 modifier = Modifier.weight(1f)
                             )
                             MetricCard(
                                 title = "Sessions",
                                 value = "${selectedDay.sessionCount}",
-                                subtitle = "App opens",
+                                subtitle = "5-minute sessions",
                                 icon = Icons.Default.FlipToFront,
                                 modifier = Modifier.weight(1f)
                             )

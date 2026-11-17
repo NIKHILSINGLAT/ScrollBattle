@@ -26,6 +26,7 @@ fun DailyDetailsScreen(
     onNavigateBack: () -> Unit
 ) {
     val selectedDay = state.weeklyDays.getOrElse(state.selectedAnalyticsDayIndex) { state.weeklyDays.last() }
+    val sessionsForSelectedDay = if (selectedDay.isToday) state.recentSessions else emptyList()
 
     Scaffold(
         containerColor = CanvasBackground,
@@ -69,7 +70,7 @@ fun DailyDetailsScreen(
                             )
                             StatusBadge(
                                 text = selectedDay.status,
-                                dotColor = if (selectedDay.reelsCount > selectedDay.allowance) CriticalRed else RecoveryGreen
+                                dotColor = if (selectedDay.reelsCount >= selectedDay.allowance && selectedDay.reelsCount > 0) CriticalRed else RecoveryGreen
                             )
                         }
 
@@ -86,7 +87,7 @@ fun DailyDetailsScreen(
                                     color = TextPrimary
                                 )
                                 Text(
-                                    text = "${selectedDay.durationMinutes} minutes total scrolling",
+                                    text = "${selectedDay.durationMinutes} estimated minutes scrolling",
                                     style = MaterialTheme.typography.bodyMedium,
                                     color = TextSecondary
                                 )
@@ -111,7 +112,7 @@ fun DailyDetailsScreen(
                 )
             }
 
-            if (state.recentSessions.isEmpty()) {
+            if (sessionsForSelectedDay.isEmpty()) {
                 item {
                     Box(
                         modifier = Modifier
@@ -120,14 +121,14 @@ fun DailyDetailsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No sessions recorded for this day.",
+                            text = if (selectedDay.isToday) "No sessions recorded for today." else "Detailed session records are retained for today only.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = TextSecondary
                         )
                     }
                 }
             } else {
-                items(state.recentSessions) { session ->
+                items(sessionsForSelectedDay) { session ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

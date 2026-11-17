@@ -36,11 +36,7 @@ class FloatingOverlayManager(private val context: Context) {
 
     private fun getOverlayType(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (android.provider.Settings.canDrawOverlays(context)) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY
-            }
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
         } else {
             @Suppress("DEPRECATION")
             WindowManager.LayoutParams.TYPE_PHONE
@@ -54,7 +50,12 @@ class FloatingOverlayManager(private val context: Context) {
         val metrics = context.resources.displayMetrics
         val defaultX = (metrics.widthPixels / 2) - dpToPx(55)
         val defaultY = dpToPx(36)
-        return Pair(prefs.getInt("pill_x", defaultX), prefs.getInt("pill_y", defaultY))
+        val maxX = (metrics.widthPixels - dpToPx(120)).coerceAtLeast(0)
+        val maxY = (metrics.heightPixels - dpToPx(80)).coerceAtLeast(0)
+        return Pair(
+            prefs.getInt("pill_x", defaultX).coerceIn(0, maxX),
+            prefs.getInt("pill_y", defaultY).coerceIn(0, maxY)
+        )
     }
 
     private fun savePillPosition(x: Int, y: Int) {
@@ -66,6 +67,7 @@ class FloatingOverlayManager(private val context: Context) {
     // FLOATING LIVE COUNTER PILL (DRAGGABLE)
     // ==========================================
     fun showPill(currentReels: Int, totalAllowance: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(context)) return
         if (isPillShowing) {
             updatePill(currentReels, totalAllowance)
             return
@@ -259,6 +261,7 @@ class FloatingOverlayManager(private val context: Context) {
         onStartChallenge: () -> Unit,
         onDoneForToday: () -> Unit
     ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(context)) return
         if (isInterruptionShowing) return
 
         try {
@@ -373,7 +376,7 @@ class FloatingOverlayManager(private val context: Context) {
                         addView(btnTitle)
 
                         val btnSub = TextView(context).apply {
-                            text = "6 questions · Unlock 20 more"
+                            text = "6 questions · Practice only"
                             textSize = 12f
                             setTextColor(Color.parseColor("#292524"))
                         }
@@ -438,17 +441,7 @@ class FloatingOverlayManager(private val context: Context) {
                 interruptionView = rootLayout
                 isInterruptionShowing = true
             } catch (e: Exception) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                    params.type == WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY &&
-                    android.provider.Settings.canDrawOverlays(context)
-                ) {
-                    params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                    windowManager.addView(rootLayout, params)
-                    interruptionView = rootLayout
-                    isInterruptionShowing = true
-                } else {
-                    e.printStackTrace()
-                }
+                e.printStackTrace()
             }
         } catch (e: Exception) {
             e.printStackTrace()

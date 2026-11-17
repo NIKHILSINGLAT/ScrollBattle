@@ -22,18 +22,18 @@ class ScrollBattleViewModelTest {
     }
 
     @Test
-    fun setDailyLimit_updatesAllowanceAndRemaining() = runTest {
+    fun setDailyLimit_cannotChangeFixedDailyCap() = runTest {
         val viewModel = ScrollBattleViewModel()
         viewModel.setDailyLimit(75)
         val state = viewModel.uiState.first()
 
-        assertEquals(75, state.baseAllowance)
-        assertEquals(75, state.totalAllowance)
-        assertEquals(75, state.remainingReels)
+        assertEquals(50, state.baseAllowance)
+        assertEquals(50, state.totalAllowance)
+        assertEquals(50, state.remainingReels)
     }
 
     @Test
-    fun mathsChallenge_correctSubmission_grantsBonusOnce() = runTest {
+    fun mathsChallenge_completion_doesNotBypassHardDailyLimit() = runTest {
         val viewModel = ScrollBattleViewModel()
 
         // Solve all 6 questions correctly
@@ -46,12 +46,12 @@ class ScrollBattleViewModelTest {
         val state = viewModel.uiState.first()
         assertTrue(state.challengeCompleted)
         assertTrue(state.bonusClaimedToday)
-        assertEquals(20, state.bonusAllowance)
-        assertEquals(70, state.totalAllowance)
+        assertEquals(0, state.bonusAllowance)
+        assertEquals(50, state.totalAllowance)
 
         // Try submitting again; should not grant bonus repeatedly
         viewModel.submitChallengeAnswer()
-        assertEquals(20, viewModel.uiState.first().bonusAllowance)
+        assertEquals(0, viewModel.uiState.first().bonusAllowance)
     }
 
     @Test
@@ -64,7 +64,7 @@ class ScrollBattleViewModelTest {
         assertEquals(0, state.todayReels)
         assertEquals(0, state.todayDurationMinutes)
         assertEquals(0, state.recentSessions.size)
-        assertEquals(75, state.baseAllowance) // preserved setting
+        assertEquals(50, state.baseAllowance) // fixed product limit
     }
 
     @Test
@@ -72,7 +72,7 @@ class ScrollBattleViewModelTest {
         val viewModel = ScrollBattleViewModel()
         viewModel.simulateReelScroll()
         viewModel.setDailyLimit(100)
-        assertEquals(100, viewModel.uiState.first().baseAllowance)
+        assertEquals(50, viewModel.uiState.first().baseAllowance)
 
         viewModel.resetSettings()
         val state = viewModel.uiState.first()
