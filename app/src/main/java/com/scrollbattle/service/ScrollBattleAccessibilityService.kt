@@ -20,9 +20,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     private lateinit var overlayManager: FloatingOverlayManager
 
     private var currentPackage: String? = null
-    private val targetPackage = "com.instagram.android"
-
-    private var lastReelPosition = -1
+    private var limitInterventionActive = false
 
     companion object {
         var isServiceRunning = false
@@ -42,9 +40,8 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                     AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
             feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
             notificationTimeout = 100
-            flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS or
-                    AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS or
-                    AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
+            packageNames = arrayOf("com.instagram.android")
+            flags = AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS
         }
         serviceInfo = info
 
@@ -59,7 +56,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             this,
             testReceiver,
             filter,
-            androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+            androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
         // Observe state changes in real time
@@ -86,32 +83,33 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     private var lastContentCheckTimestamp = 0L
 
     private fun isTargetApp(pkg: String?): Boolean {
-        return pkg == "com.instagram.android" || 
-               pkg == "com.instagram.lite" || 
-               pkg == "com.google.android.youtube" || 
-               pkg == "com.snapchat.android"
+        return pkg == "com.instagram.android"
     }
 
     private fun enforceLimitIfExceeded(): Boolean {
         val state = repository.state.value
-        if (state.todayReels >= state.totalAllowance) {
+        if (state.todayReels < state.totalAllowance) {
+            limitInterventionActive = false
+            return false
+        }
+        if (!limitInterventionActive) {
+            limitInterventionActive = true
             overlayManager.hideAll()
-            // Force stop / kick user out of Instagram immediately!
+            // Android cannot force-stop another app. Move the user out of the restricted feed.
             performGlobalAction(GLOBAL_ACTION_HOME)
-
             val intent = Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 putExtra("destination", "limit_reached")
             }
             startActivity(intent)
-            return true
         }
-        return false
+        return true
     }
 
     private fun isReelsActive(eventSource: android.view.accessibility.AccessibilityNodeInfo? = null): Boolean {
         val root = rootInActiveWindow ?: eventSource ?: return false
         try {
+            if (root.packageName?.toString() != "com.instagram.android") return false
             // Exclude Direct Messages and other non-video screens
             val direct = root.findAccessibilityNodeInfosByViewId("com.instagram.android:id/direct_thread_layout")
             if (!direct.isNullOrEmpty()) return false
@@ -128,10 +126,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                 "com.instagram.android:id/clips_swipe_refresh_container",
                 "com.instagram.android:id/clips_action_bar_container",
                 "com.instagram.android:id/reel_viewer_media_layout",
-                "com.google.android.youtube:id/reel_player_page_content",
-                "com.google.android.youtube:id/reel_recycler",
-                "com.snapchat.android:id/spotlight_container"
-            )
+             )
             for (id in containerIds) {
                 val nodes = root.findAccessibilityNodeInfosByViewId(id)
                 if (!nodes.isNullOrEmpty()) return true
@@ -164,10 +159,28 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         val eventPackage = event?.packageName?.toString() ?: return
 
-        // 0. If in target app and 50-reels limit reached, FORCE CLOSE & KICK OUT IMMEDIATELY
-        if (isTargetApp(eventPackage) && enforceLimitIfExceeded()) {
+        // Track only Instagram. Other apps must never trigger Reel enforcement.
+        if (!isTargetApp(eventPackage)) {
+            if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+                currentPackage = eventPackage
+                limitInterventionActive = false
+                overlayManager.hideAll()
+            }
             return
         }
+
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            currentPackage = eventPackage
+        }
+
+        // Enforce only while the Instagram short-video feed is actually detected.
+        val reelsActive = isReelsActive(event.source)
+        if (!reelsActive) {
+            limitInterventionActive = false
+            if (overlayManager.isPillVisible) overlayManager.hidePill()
+            return
+        }
+        if (enforceLimitIfExceeded()) return
 
         // 1. App or Window transition
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
@@ -230,8 +243,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             }
             lastSwipeTimestamp = now
 
-            val srcName = if (eventPackage.contains("youtube")) "YouTube Shorts" else "Instagram Reels"
-            repository.recordReelTransition(srcName)
+            repository.recordReelTransition("Instagram Reels")
 
             // If this swipe pushed count to 50, kick user out of Instagram immediately!
             if (enforceLimitIfExceeded()) return
