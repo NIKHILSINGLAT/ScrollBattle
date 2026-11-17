@@ -222,9 +222,9 @@ fun BattleScreen(
                 ) {
                     if (state.isLimitExceeded) {
                         PrimaryActionButton(
-                            text = if (state.bonusClaimedToday) "Bonus allowance claimed (+20)" else "Start Maths Challenge (+20 Reels)",
+                            text = "Practice Maths Challenge",
                             leadingIcon = Icons.Default.Calculate,
-                            enabled = !state.bonusClaimedToday,
+                            enabled = true,
                             onClick = onStartChallenge
                         )
                         SecondaryActionButton(
