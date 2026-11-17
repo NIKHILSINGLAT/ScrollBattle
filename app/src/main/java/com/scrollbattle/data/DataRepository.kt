@@ -342,7 +342,8 @@ class DefaultScrollBattleRepository(
                 if (day.dateKey == todayDate || (day.isToday && day.dateKey.isBlank())) day.copy(
                     reelsCount = newToday,
                     durationMinutes = estimatedMinutes,
-                    sessionCount = updatedSessions.size
+                    sessionCount = current.todaySessionsCount + if (isNewSession) 1 else 0,
+                    status = if (newToday >= current.totalAllowance) "Limit Reached" else "Within Limit"
                 ) else day
             }
             current.copy(
