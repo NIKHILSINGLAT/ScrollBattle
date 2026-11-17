@@ -298,7 +298,7 @@ class DefaultScrollBattleRepository(
 
     override fun recordReelTransition(source: String) {
         val now = System.currentTimeMillis()
-        // Deduplicate reel transitions (400ms for Instagram, 150ms for simulated test clicks)
+        // Deduplicate reel transitions (250ms for Instagram, 150ms for simulated test clicks)
         val minInterval = if (source == "Simulated") 150L else 250L
         if (now - lastRecordedTimestamp < minInterval) {
             return
