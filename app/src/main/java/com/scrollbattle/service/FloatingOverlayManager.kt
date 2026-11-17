@@ -50,7 +50,12 @@ class FloatingOverlayManager(private val context: Context) {
         val metrics = context.resources.displayMetrics
         val defaultX = (metrics.widthPixels / 2) - dpToPx(55)
         val defaultY = dpToPx(36)
-        return Pair(prefs.getInt("pill_x", defaultX), prefs.getInt("pill_y", defaultY))
+        val maxX = (metrics.widthPixels - dpToPx(120)).coerceAtLeast(0)
+        val maxY = (metrics.heightPixels - dpToPx(80)).coerceAtLeast(0)
+        return Pair(
+            prefs.getInt("pill_x", defaultX).coerceIn(0, maxX),
+            prefs.getInt("pill_y", defaultY).coerceIn(0, maxY)
+        )
     }
 
     private fun savePillPosition(x: Int, y: Int) {
