@@ -274,9 +274,9 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                 return
             }
 
-            // Strict debounce: minimum 400ms between reel increments
+            // Strict debounce: minimum 250ms between reel increments
             val now = System.currentTimeMillis()
-            if (now - lastSwipeTimestamp < 400L) {
+            if (now - lastSwipeTimestamp < 250L) {
                 return
             }
             lastSwipeTimestamp = now
