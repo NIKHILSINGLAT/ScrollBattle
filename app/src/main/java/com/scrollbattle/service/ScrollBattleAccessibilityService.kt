@@ -139,7 +139,7 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             }
 
             // Fallback: Check for distinct Reels UI text markers (for newer or obfuscated Instagram builds)
-            val reelsMarkers = listOf("Original audio", "Remix", "Reels", "Reel by", "Use audio")
+            val reelsMarkers = listOf("Original audio", "Reel by", "Use audio")
             for (marker in reelsMarkers) {
                 val nodes = root.findAccessibilityNodeInfosByText(marker)
                 if (!nodes.isNullOrEmpty()) {
@@ -236,9 +236,9 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
                 return
             }
 
-            // Strict debounce: minimum 700ms between reel increments
+            // Strict debounce: minimum 400ms between reel increments
             val now = System.currentTimeMillis()
-            if (now - lastSwipeTimestamp < 700L) {
+            if (now - lastSwipeTimestamp < 400L) {
                 return
             }
             lastSwipeTimestamp = now
