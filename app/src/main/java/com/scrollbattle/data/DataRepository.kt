@@ -117,7 +117,17 @@ class DefaultScrollBattleRepository(
         val bonusAllowance = if (isNewDay) 0 else prefs.getInt("bonus_allowance", defaultState.bonusAllowance)
         val bonusClaimed = if (isNewDay) false else prefs.getBoolean("bonus_claimed", defaultState.bonusClaimedToday)
 
-        if (isNewDay || lastDate.isEmpty()) {
+        if (isNewDay) {
+            prefs.edit()
+                .putString("last_date", todayStr)
+                .putInt("today_reels", 0)
+                .putInt("today_duration_minutes", 0)
+                .putInt("today_sessions_count", 0)
+                .putString("recent_sessions", "[]")
+                .putInt("bonus_allowance", 0)
+                .putBoolean("bonus_claimed", false)
+                .apply()
+        } else if (lastDate.isEmpty()) {
             prefs.edit().putString("last_date", todayStr).apply()
         }
 
@@ -213,7 +223,7 @@ class DefaultScrollBattleRepository(
     override fun recordReelTransition(source: String) {
         val now = System.currentTimeMillis()
         // Deduplicate reel transitions (700ms for short videos, 150ms for simulated test clicks)
-        val minInterval = if (source == "Simulated") 150L else 700L
+        val minInterval = if (source == "Simulated") 150L else 400L
         if (now - lastRecordedTimestamp < minInterval) {
             return
         }
