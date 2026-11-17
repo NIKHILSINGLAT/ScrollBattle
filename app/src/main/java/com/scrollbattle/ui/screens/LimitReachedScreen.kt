@@ -90,7 +90,7 @@ fun LimitReachedScreen(
                 )
 
                 Text(
-                    text = "Reels are locked.",
+                    text = "Instagram is locked.",
                     style = MaterialTheme.typography.headlineSmall,
                     color = CriticalRed,
                     fontWeight = FontWeight.SemiBold,
@@ -101,7 +101,7 @@ fun LimitReachedScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "You reached your daily 50-Reel limit. The Reel feed will remain restricted until the daily reset.",
+                    text = "You reached your daily limit of 50 Reels. Instagram is blocked across the entire app — including Reels, Feed, profiles and DMs — until 4:00 AM.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = TextSecondary,
                     textAlign = TextAlign.Center,
@@ -131,7 +131,7 @@ fun LimitReachedScreen(
                             Text(text = "${state.todayDurationMinutes}m", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = TextPrimary)
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = "Resets At", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
+                            Text(text = "Instagram unlocks", style = MaterialTheme.typography.labelSmall, color = TextSecondary)
                             Text(text = "04:00 AM", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = TextPrimary)
                         }
                     }
@@ -149,7 +149,7 @@ fun LimitReachedScreen(
                     onClick = onStartChallenge
                 )
                 SecondaryActionButton(
-                    text = "I'm done for today",
+                    text = "Return to ScrollBattle",
                     leadingIcon = Icons.Default.VerifiedUser,
                     onClick = onDoneForToday
                 )
