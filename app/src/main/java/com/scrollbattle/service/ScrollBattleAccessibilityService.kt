@@ -173,6 +173,8 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             return
         }
 
+        repository.refreshDailyBoundary()
+
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             currentPackage = eventPackage
         }
