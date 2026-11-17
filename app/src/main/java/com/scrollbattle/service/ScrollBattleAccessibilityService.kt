@@ -109,8 +109,8 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
     private fun isReelsActive(eventSource: android.view.accessibility.AccessibilityNodeInfo? = null): Boolean {
         val activeRoot = rootInActiveWindow
         val root = when {
-            activeRoot?.packageName?.toString() == "com.instagram.android" -> activeRoot
-            eventSource?.packageName?.toString() == "com.instagram.android" -> eventSource
+            activeRoot?.packageName?.toString() == "com.instagram.android" -> activeRoot!!
+            eventSource?.packageName?.toString() == "com.instagram.android" -> eventSource!!
             else -> return false
         }
         try {
