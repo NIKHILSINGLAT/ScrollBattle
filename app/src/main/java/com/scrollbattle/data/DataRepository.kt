@@ -18,6 +18,7 @@ interface ScrollBattleRepository {
     fun setDailyLimit(limit: Int)
     fun unlockBonusAllowance(amount: Int = 20)
     fun refreshPermissions(context: Context)
+    fun refreshDailyBoundary()
     fun resetChallenge()
     fun selectChallengeOption(optionIndex: Int)
     fun submitChallengeAnswer()
@@ -179,6 +180,12 @@ class DefaultScrollBattleRepository(
             apply()
         }
         context?.let { com.scrollbattle.widget.BrainPalWidgetProvider.updateAllWidgets(it) }
+    }
+
+    override fun refreshDailyBoundary() {
+        val today = getTodayDateString()
+        val storedDate = prefs?.getString("last_date", today) ?: today
+        if (storedDate != today) updateState { it }
     }
 
     override fun updateState(transform: (ScrollBattleState) -> ScrollBattleState) {
