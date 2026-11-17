@@ -79,7 +79,7 @@ fun SettingsScreen(
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = "Fixed daily hard limit. Once 50 reels are watched, Instagram is immediately force-closed and blocked for the day.",
+                                text = "Fixed daily cap. At 50 Reel transitions, ScrollBattle exits the detected Reel feed.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = TextSecondary
                             )
@@ -132,20 +132,16 @@ fun SettingsScreen(
                                 color = TextPrimary
                             )
                             Text(
-                                text = "Presents full-screen breath reminder and requires maths challenge to unlock additional reels.",
+                                text = "Always active. The 50-Reel cap cannot be disabled or increased.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = TextSecondary
                             )
                         }
-                        Switch(
-                            checked = state.settings.hardIntervention,
-                            onCheckedChange = onToggleIntervention,
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = TextPrimary,
-                                checkedTrackColor = PrimaryOrange,
-                                uncheckedThumbColor = TextSecondary,
-                                uncheckedTrackColor = SurfaceElevated
-                            )
+                        Text(
+                            text = "ALWAYS ON",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = RecoveryGreen
                         )
                     }
                 }
