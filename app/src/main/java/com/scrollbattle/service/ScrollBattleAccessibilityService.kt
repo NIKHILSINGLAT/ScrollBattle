@@ -194,6 +194,13 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             currentPackage = eventPackage
         }
 
+        // Throttle noisy layout-change events before traversing the accessibility tree.
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+            val now = System.currentTimeMillis()
+            if (now - lastContentCheckTimestamp < 800L) return
+            lastContentCheckTimestamp = now
+        }
+
         // Enforce only while the Instagram short-video feed is actually detected.
         val reelsActive = isReelsActive(event.source)
         if (!reelsActive) {
@@ -239,21 +246,8 @@ class ScrollBattleAccessibilityService : AccessibilityService() {
             }
         }
 
-        // 2. Window Content Changed: Throttled to at most once per 800ms
-        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED && isTargetApp(eventPackage)) {
-            val now = System.currentTimeMillis()
-            if (now - lastContentCheckTimestamp > 800L) {
-                lastContentCheckTimestamp = now
-                val inReels = isReelsActive(event.source)
-                val state = repository.state.value
-                if (inReels && !overlayManager.isPillVisible) {
-                    overlayManager.showPill(state.todayReels, state.totalAllowance)
-                } else if (!inReels && overlayManager.isPillVisible) {
-                    overlayManager.hidePill()
-                }
-            }
-            return
-        }
+        // The feed state was already checked above for this throttled content-change event.
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) return
 
         // 3. ONLY ON ACTUAL VERTICAL SHORT-VIDEO SCROLL
         if (event.eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED && isTargetApp(eventPackage)) {
