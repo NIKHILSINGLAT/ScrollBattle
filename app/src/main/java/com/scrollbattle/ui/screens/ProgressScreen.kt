@@ -114,7 +114,7 @@ fun ProgressScreen(
                                 color = TextPrimary
                             )
                             StatusBadge(
-                                text = "Avg 41 Reels/day",
+                                text = "Daily average unavailable",
                                 dotColor = RecoveryGreen
                             )
                         }
